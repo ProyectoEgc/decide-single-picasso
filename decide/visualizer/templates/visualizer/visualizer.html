@@ -10,22 +10,21 @@
 {% block content %}
     <div id="app-visualizer">
         <!-- Navbar -->
-        <nav class="navbar navbar-dark bg-dark">
+        <nav class="navbar navbar-dark bg-secondary">
             <div class="container-fluid">
                 <h1 class="navbar-brand">Decide</h1>
             </div>
         </nav>
           
 
-        <div class="voting container">
-            <h1>[[ voting.id ]] - [[ voting.name ]]</h1>
-
-            <h2 v-if="!voting.start_date">Votación no comenzada</h2>
-            <h2 v-else-if="!voting.end_date">Votación en curso</h2>
+        <div class="voting container text-center">
+            <div class="card" style="width: 100%;">
+            <h1 class="card-title">[[ voting.name ]]</h1>
+            <h3 v-if="!voting.start_date" class="card-subtitle mb-2 text-muted">Votación no comenzada</h3>
+            <h3 v-else-if="!voting.end_date" class="card-subtitle mb-2 text-muted">Votación en curso</h3>
             <div v-else>
-                <h2 class="heading">Resultados:</h2>
-
-                <table class="table table-bordered table-striped">
+                <h4>[[voting.question.desc]]</h4>
+                <table class="table table-bordered table-striped table-hover">
                     <thead>
                         <tr>
                             <th>Opción</th>
@@ -41,6 +40,7 @@
                         </tr>
                     </tbody>
                 </table>
+            </div>
             </div>
 
         </div>
