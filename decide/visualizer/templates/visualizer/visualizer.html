@@ -40,6 +40,8 @@
                         </tr>
                     </tbody>
                 </table>
+                <h2 class="heading">Gráficos:</h2>
+                <canvas id="miGrafico" height="auto" width="auto"></canvas>
             </div>
             </div>
 
@@ -52,6 +54,8 @@
     <script src="https://unpkg.com/vue"></script>
     <script src="https://unpkg.com/babel-polyfill@latest/dist/polyfill.min.js"></script>
     <script src="https://unpkg.com/bootstrap@5.2.2/dist/js/bootstrap.js"></script>
+    <!-- ChartJS -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <script>
         var voting = {{voting|safe}};
@@ -64,6 +68,46 @@
                 }
             }
         }).mount('#app-visualizer')
+
+    function generarColoresAleatorios(numColores) {
+        var colores = [];
+        for (var i = 0; i < numColores; i++) {
+            var color = "#" + Math.floor(Math.random() * 16777215).toString(16);
+            colores.push(color);
+        }
+        return colores;
+}
+
+    // Generamos colores aleatorios para cada dato en el gráfico
+    var numDatos = voting.postproc.map((opt) => opt.option).length;
+    var coloresAleatorios = generarColoresAleatorios(numDatos);
+
+    // Configuramos el gráfico
+    var config = {
+        type: 'bar', 
+        data: {
+            labels: voting.postproc.map((opt) => opt.option),
+            datasets: [
+            {
+                label: 'Resultado de la votación',
+                data: voting.postproc.map((opt) => opt.votes),
+                backgroundColor: coloresAleatorios,
+                borderWidth: 4
+            }
+        ]
+        },
+        options: {
+                responsive: true,
+                title: {
+                    text: voting.name,
+                    display: true
+                }
+            }
+    };
+
+    var ctx = document.getElementById('miGrafico').getContext('2d');
+    var myChart = new Chart(ctx, config);
+
     </script>
 </body>
 {% endblock %}
