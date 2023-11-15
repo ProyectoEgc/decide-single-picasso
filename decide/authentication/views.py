@@ -1,4 +1,5 @@
 from rest_framework.response import Response
+from django.http import HttpResponse
 from rest_framework.status import (
         HTTP_201_CREATED,
         HTTP_400_BAD_REQUEST,
@@ -12,6 +13,13 @@ from django.shortcuts import get_object_or_404
 from django.core.exceptions import ObjectDoesNotExist
 
 from .serializers import UserSerializer
+from django.template import loader
+from django.shortcuts import render
+from django.views.generic import CreateView
+from django.contrib.auth import authenticate, login
+from django.shortcuts import get_object_or_404, redirect
+from django.views import View
+from django.contrib.auth import logout
 
 
 class GetUserView(APIView):
@@ -53,3 +61,48 @@ class RegisterView(APIView):
         except IntegrityError:
             return Response({}, status=HTTP_400_BAD_REQUEST)
         return Response({'user_pk': user.pk, 'token': token.key}, HTTP_201_CREATED)
+
+def home(request):
+    if(request.user.is_authenticated == True):
+        template = loader.get_template("authentication/decide.html")
+        authenticated = True
+    else:
+        return redirect('/authentication/login-view')
+        authenticated = False
+    context = {}
+    return HttpResponse(template.render(context, request))
+
+class LoginView(View):
+
+    template_name = "authentication/login.html"
+
+    def get(self, request):
+        return render(request, self.template_name)
+
+    def post(self, request):
+        username = request.POST.get('username')
+        password = request.POST.get('password1')
+
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None:
+            login(request, user)
+            return redirect("/")
+        else:
+            # Handle invalid login credentials here
+            return render(request, self.template_name, {'error_message': 'Invalid login credentials'})
+
+
+    @staticmethod     
+    def authenticated(request):
+        return render(request, 'authentication/authenticated.html', {
+                'username' : request.user
+            })
+    
+def logout_view(request):
+    response = redirect("/")
+    if request.user.is_authenticated == True:
+        logout(request)
+        response.delete_cookie('token')
+        response.delete_cookie('decide')
+    return response
