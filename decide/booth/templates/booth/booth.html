@@ -10,15 +10,12 @@
 
 {% block content %}
 
-<div id="app-booth">
+<div id="app-booth"> 
     <!-- Navbar -->
-    <nav class="navbar navbar-dark bg-primary">
+    <nav class="navbar navbar-dark bg-secondary">
         <div class="container-fluid">
             <div class="navbar-brand" >Decide</div>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <div class="float-end">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item" v-if="!signup">
                         <button v-on:click="decideLogout" class="btn btn-secondary">{% trans "Logout" %}</button>
@@ -64,7 +61,7 @@
     </div>
 
     <div class="voting" >
-        <div class="alert alert-primary d-flex align-items-center me-5" role="alert" :variant="alertLvl" dismissible v-if="signup">
+        <div class="alert alert-primary d-flex align-items-center me-5 mensaje" role="alert" :variant="alertLvl" dismissible v-if="signup">
             {% comment %} <svg class="bi flex-shrink-0 me-2" role="img" aria-label="Danger:"><use xlink:href="#exclamation-triangle-fill"/></svg> {% endcomment %}
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-in-right" viewBox="0 0 16 16">
                 <path fill-rule="evenodd" d="M6 3.5a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-2a.5.5 0 0 0-1 0v2A1.5 1.5 0 0 0 6.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-8A1.5 1.5 0 0 0 5 3.5v2a.5.5 0 0 0 1 0v-2z"/>
@@ -115,19 +112,22 @@
         </div>
 
         <!-- Voting -->
-        <div v-if="!signup">
-            <h1>[[ voting.id ]] - [[ voting.name ]]</h1>
-            <h2>[[ voting.question.desc ]]</h2>
-            <form v-for="opt in voting.question.options" :key="opt.number">
-                <div class="form-group">
-                    <input type="radio" v-model="selected"
-                                :id="'q' + opt.number"
-                                name="question"
-                                :value="opt.number">
-                        [[ opt.option ]]
-                </div>
-            </form>
-            <button class="btn btn-primary mt-3" v-on:click="decideSend">
+        <div v-if="!signup" class="d-flex text-center justify-content-center">
+            <div class="card" style="width: 80%;">
+                <h1 class="card-title">[[ voting.name ]]</h1>
+                <hr />
+                <h2 class="card-subtitle mb-2 text-muted">[[ voting.question.desc ]]</h2>
+                <form v-for="opt in voting.question.options" :key="opt.number">
+                    <div class="form-group">
+                        <div class="textoption">
+                        <input type="radio" v-model="selected"
+                                    :id="'q' + opt.number"
+                                    name="question"
+                                    :value="opt.number">
+                    [[ opt.option ]]</div>
+                </form>
+            </div> 
+            <button class="btn btn-success mt-3" v-on:click="decideSend">
                 {% trans "Vote" %}
             </button>
         </div>
