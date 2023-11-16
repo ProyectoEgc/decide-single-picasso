@@ -10,17 +10,36 @@
 {% block content %}
 <nav class="navbar navbar-dark bg-secondary">
     <div class="container-fluid">
-        <div class="navbar-brand" >Decide</div>
+        <div class="navbar-brand">Decide</div>
         <div class="float-end">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item" v-if="!signup">
-                    <a href="/authentication/logout-view"><button class="btn btn-secondary">{% trans "Logout" %}</button></a>
+                    <a href="/authentication/logout-view"><button class="btn btn-secondary">Logout</button></a>
                 </li>
             </ul>
         </div>
     </div>
 </nav>
 
+{% if votings|length == 0 %}
+<p class="lead">You don't have any votings to vote</p>
+{% endif %}
+{% if votings|length > 0 %}
+<div class="container mx-auto" style="margin-top: 25px;">
+    <div class="row justify-content-around">
+        <div class="col-3">
+            {% for voting in votings %}
+            <a class="nav-link" href="/booth/{{ voting.id }}">
+                <div class="card text-center">
+                    <h3 class="card-title">{{ voting.name }}</h1>
+                        <h4 class="card-subtitle mb-2 text-muted">{{ voting.question.desc }}</h2>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endif %}
 {% endblock %}
 
 {% block extrabody %}

@@ -25,6 +25,8 @@ from django.shortcuts import render
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.http import HttpResponse
+from census.models import Census
+from voting.models import Voting
 
 def home(request):
     return render(request,'home.html')
@@ -105,6 +107,22 @@ def home(request):
         return redirect('/authentication/login-view')
         authenticated = False
     context = {}
+    votings=[]
+    if request.user.is_authenticated == True:
+        authenticated = True
+        context['username'] = request.user.username
+        census = Census.objects.filter(voter_id=request.user.id)
+        for c in census:
+            voting_id = c.voting_id
+
+            voting = Voting.objects.get(id = voting_id)
+            
+            if voting is not None and voting.start_date is not None and voting.end_date is None:
+                votings.append(voting) 
+
+    context['authenticated'] = authenticated
+    context['votings'] = votings
+
     return HttpResponse(template.render(context, request))
 
 class LoginView(View):

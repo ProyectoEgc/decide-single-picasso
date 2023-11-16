@@ -9,7 +9,8 @@
 
 {% block content %}
 
-<body style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/5/5b/ETSI_Inform%C3%A1tica_Sevilla_y_DrupalCamp_Spain_2011.jpg/1200px-ETSI_Inform%C3%A1tica_Sevilla_y_DrupalCamp_Spain_2011.jpg'); background-size: cover;">
+<body
+    style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/5/5b/ETSI_Inform%C3%A1tica_Sevilla_y_DrupalCamp_Spain_2011.jpg/1200px-ETSI_Inform%C3%A1tica_Sevilla_y_DrupalCamp_Spain_2011.jpg'); background-size: cover;">
     <div class="d-flex mx-auto justify-content-center" style="margin-top: 10%;">
         <div class="card" style="width: 70%;">
             <div class="card-body">
@@ -23,9 +24,16 @@
 
                     <div class="fieldWrapper">
                         <label for="id_password1">Password:</label>
-                        <input type="text" name="password1" class="form-control mb-2" required="" id="id_password1">
+                        <input type="password" name="password1" class="form-control mb-2" required="" id="id_password1">
                     </div>
-                    <input type="submit" class="btn btn-primary" value="Login">
+                    <div class="row">
+                        <div class="col-9">
+                            <input type="submit" class="btn btn-primary" value="Login">
+                        </div>
+                        <div class="col-3">
+                            <p style="margin-top: 15px;">Not registered? <a href="/signup">Sign up</a></p>
+                        </div>
+                    </div>
                 </form>
             </div>
         </div>
