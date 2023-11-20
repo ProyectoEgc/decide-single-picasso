@@ -102,12 +102,11 @@ class RegisterView(APIView):
 def home(request):
     if(request.user.is_authenticated == True):
         template = loader.get_template("authentication/decide.html")
-        authenticated = True
     else:
         return redirect('/authentication/login-view')
-        authenticated = False
     context = {}
     votings=[]
+    closed_votings=[]
     if request.user.is_authenticated == True:
         authenticated = True
         context['username'] = request.user.username
@@ -119,9 +118,12 @@ def home(request):
             
             if voting is not None and voting.start_date is not None and voting.end_date is None:
                 votings.append(voting) 
+            if voting is not None and voting.start_date is not None and voting.end_date is not None:
+                closed_votings.append(voting)
 
     context['authenticated'] = authenticated
     context['votings'] = votings
+    context['closed_votings'] = closed_votings
 
     return HttpResponse(template.render(context, request))
 
