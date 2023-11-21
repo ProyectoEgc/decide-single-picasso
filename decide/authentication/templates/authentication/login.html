@@ -34,6 +34,11 @@
                             <p style="margin-top: 15px;">Not registered? <a href="/signup">Sign up</a></p>
                         </div>
                     </div>
+                    {% if error_message|length != 0 %}
+                    <div class="alert alert-danger">
+                        {{error_message}}
+                    </div>
+                    {% endif %}
                 </form>
             </div>
         </div>

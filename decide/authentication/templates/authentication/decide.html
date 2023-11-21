@@ -25,18 +25,44 @@
 <p class="lead">You don't have any votings to vote</p>
 {% endif %}
 {% if votings|length > 0 %}
-<div class="container mx-auto" style="margin-top: 25px;">
-    <div class="row justify-content-around">
+<div class="container-fluid mx-auto" style="margin-top: 25px;">
+    <h1 class="text-center">Open Votings</h1>
+    <hr />
+    <div class="row justify-content-center">
+        {% for voting in votings %}
         <div class="col-3">
-            {% for voting in votings %}
             <a class="nav-link" href="/booth/{{ voting.id }}">
                 <div class="card text-center">
                     <h3 class="card-title">{{ voting.name }}</h1>
                         <h4 class="card-subtitle mb-2 text-muted">{{ voting.question.desc }}</h2>
                 </div>
             </a>
-            {% endfor %}
         </div>
+        {% endfor %}
+
+    </div>
+</div>
+{% endif %}
+
+{% if closed_votings|length == 0 %}
+<p class="lead">You don't have any closed voting</p>
+{% endif %}
+{% if votings|length > 0 %}
+<div class="container-fluid mx-auto" style="margin-top: 25px;">
+    <h1 class="text-center">Closed Votings</h1>
+    <hr />
+    <div class="row justify-content-center">
+        {% for voting in closed_votings %}
+        <div class="col-3">
+            <a class="nav-link" href="/visualizer/{{ voting.id }}">
+                <div class="card text-center">
+                    <h3 class="card-title">{{ voting.name }}</h1>
+                        <h4 class="card-subtitle mb-2 text-muted">{{ voting.question.desc }}</h2>
+                </div>
+            </a>
+        </div>
+        {% endfor %}
+
     </div>
 </div>
 {% endif %}
