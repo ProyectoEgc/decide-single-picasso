@@ -238,6 +238,16 @@ class VotingTestCase(BaseTestCase):
         self.login()
         response = self.client.post('/voting/{}/'.format(v.pk), data, format= 'json')
         self.assertEquals(response.status_code, 405)
+    
+    def test_to_string(self):
+        #Crea un objeto votacion
+        v = self.create_voting()
+        #Verifica que el nombre de la votacion es test voting
+        self.assertEquals(str(v),"test voting")
+        #Verifica que la descripcion de la pregunta sea test question
+        self.assertEquals(str(v.question),"test question")
+        #Verifica que la primera opcion es option1 (2)
+        self.assertEquals(str(v.question.options.all()[0]),"option 1 (2)")
 
 class LogInSuccessTests(StaticLiveServerTestCase):
 
@@ -383,16 +393,6 @@ class QuestionsTests(StaticLiveServerTestCase):
 
         self.assertTrue(self.cleaner.find_element_by_xpath('/html/body/div/div[3]/div/div[1]/div/form/div/p').text == 'Please correct the errors below.')
         self.assertTrue(self.cleaner.current_url == self.live_server_url+"/admin/voting/question/add/")
-    
-    def test_to_string(self):
-        #Crea un objeto votacion
-        v = self.create_voting()
-        #Verifica que el nombre de la votacion es test voting
-        self.assertEquals(str(v),"test voting")
-        #Verifica que la descripcion de la pregunta sea test question
-        self.assertEquals(str(v.question),"test question")
-        #Verifica que la primera opcion es option1 (2)
-        self.assertEquals(str(v.question.options.all()[0]),"option 1 (2)")
 
 class VotingModelTestCase(BaseTestCase):
     def setUp(self):
