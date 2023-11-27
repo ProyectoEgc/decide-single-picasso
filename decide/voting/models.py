@@ -10,19 +10,32 @@ from base.models import Auth, Key
 class Question(models.Model):
     desc = models.TextField()
     TYPES = [
-            ('C', 'Classic question'),
-            ('B', 'Yes/No question'),
-            ]
+        ('C', 'Classic question'),
+        ('B', 'Yes/No question'),
+        ('S', 'Score question')
+    ]
     
     type = models.CharField(max_length=1, choices=TYPES, default='C')
 
-    def save(self):
-        super().save()
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
         if self.type == 'B':
             import voting.views
             voting.views.create_yes_no_question(self)
+            
     def __str__(self):
         return self.desc
+
+@receiver(post_save, sender=Question)
+def my_handler(sender, instance, **kwargs):
+    if instance.type == 'S':
+        instance.options.all().delete()
+        instance.options.create(option='1')
+        instance.options.create(option='2')
+        instance.options.create(option='3')
+        instance.options.create(option='4')
+        instance.options.create(option='5')
+
 
 
 class QuestionOption(models.Model):
@@ -30,9 +43,12 @@ class QuestionOption(models.Model):
     number = models.PositiveIntegerField(blank=True, null=True)
     option = models.TextField()
 
-    def save(self):
+    def save(self, *args, **kwargs):
         if self.question.type == 'B':
             if not self.option == 'Sí' and not self.option == 'No':
+                return ""
+        elif self.question.type=='S':
+            if not self.option == '1' and not self.option == '2' and not self.option == '3' and not self.option == '4' and not self.option == '5':
                 return ""
         else:
             if not self.number:

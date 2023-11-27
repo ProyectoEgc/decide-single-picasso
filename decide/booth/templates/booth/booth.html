@@ -121,10 +121,17 @@
                 <form v-for="opt in voting.question.options" :key="opt.number">
                     <div class="form-group">
                         <div class="textoption">
+                        {% if voting.question.type == 'Score' %}
                         <input type="radio" v-model="selected"
                                     :id="'q' + opt.number"
                                     name="question"
                                     :value="opt.number">
+                        {% else %}
+                        <input type="radio" v-model="selected"
+                                    :id="'q' + opt.number"
+                                    name="question"
+                                    :value="opt.number">
+                        {% endif %}
                     [[ opt.option ]]</div>
                 </form>
             </div> 
