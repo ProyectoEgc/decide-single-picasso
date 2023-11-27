@@ -12,11 +12,11 @@
         <!-- Navbar -->
         <nav class="navbar navbar-dark bg-secondary">
             <div class="container-fluid">
-                <div class="navbar-brand">Decide</div>
+                <div class="navbar-brand">{% trans "Decide" %}</div>
                 <div class="float-end">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item" v-if="!signup">
-                            <a href="/"><button class="btn btn-secondary">Inicio</button></a>
+                            <a href="/"><button class="btn btn-secondary">{% trans "Home" %}</button></a>
                         </li>
                     </ul>
                 </div>
@@ -27,16 +27,16 @@
         <div class="voting container text-center">
             <div class="card" style="width: 100%;">
             <h1 class="card-title">[[ voting.name ]]</h1>
-            <h3 v-if="!voting.start_date" class="card-subtitle mb-2 text-muted">Votación no comenzada</h3>
-            <h3 v-else-if="!voting.end_date" class="card-subtitle mb-2 text-muted">Votación en curso</h3>
+            <h3 v-if="!voting.start_date" class="card-subtitle mb-2 text-muted">{% trans "Voting not started" %}</h3>
+            <h3 v-else-if="!voting.end_date" class="card-subtitle mb-2 text-muted">{% trans "Voting in progress" %}</h3>
             <div v-else>
                 <h4>[[voting.question.desc]]</h4>
                 <table class="table table-bordered table-striped table-hover">
                     <thead>
                         <tr>
-                            <th>Opción</th>
-                            <th>Puntuación</th>
-                            <th>Votos</th>
+                            <th>{% trans "Option" %}</th>
+                            <th>{% trans "Score" %}</th>
+                            <th>{% trans "Votes" %}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -47,8 +47,8 @@
                         </tr>
                     </tbody>
                 </table>
-                <h2 class="heading">Gráficos:</h2>
-                <canvas id="miGrafico" height="auto" width="auto"></canvas>
+                <h2 class="heading">{% trans "Charts" %}:</h2>
+                <canvas id="myChart" height="auto" width="auto"></canvas>
             </div>
             </div>
 
@@ -57,11 +57,11 @@
 {% endblock %}
 
 {% block extrabody %}
-    <!-- Vuejs -->
+    <!-- Vue.js -->
     <script src="https://unpkg.com/vue"></script>
     <script src="https://unpkg.com/babel-polyfill@latest/dist/polyfill.min.js"></script>
     <script src="https://unpkg.com/bootstrap@5.2.2/dist/js/bootstrap.js"></script>
-    <!-- ChartJS -->
+    <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <script>
@@ -76,29 +76,29 @@
             }
         }).mount('#app-visualizer')
 
-    function generarColoresAleatorios(numColores) {
-        var colores = [];
-        for (var i = 0; i < numColores; i++) {
+    function generateRandomColors(numColors) {
+        var colors = [];
+        for (var i = 0; i < numColors; i++) {
             var color = "#" + Math.floor(Math.random() * 16777215).toString(16);
-            colores.push(color);
+            colors.push(color);
         }
-        return colores;
+        return colors;
 }
 
-    // Generamos colores aleatorios para cada dato en el gráfico
-    var numDatos = voting.postproc.map((opt) => opt.option).length;
-    var coloresAleatorios = generarColoresAleatorios(numDatos);
+    // Generate random colors for each data point in the chart
+    var numDataPoints = voting.postproc.map((opt) => opt.option).length;
+    var randomColors = generateRandomColors(numDataPoints);
 
-    // Configuramos el gráfico
+    // Configure the chart
     var config = {
         type: 'bar', 
         data: {
             labels: voting.postproc.map((opt) => opt.option),
             datasets: [
             {
-                label: 'Resultado de la votación',
+                label: {% trans "'Voting Results'" %},
                 data: voting.postproc.map((opt) => opt.votes),
-                backgroundColor: coloresAleatorios,
+                backgroundColor: randomColors,
                 borderWidth: 4
             }
         ]
@@ -112,7 +112,7 @@
             }
     };
 
-    var ctx = document.getElementById('miGrafico').getContext('2d');
+    var ctx = document.getElementById('myChart').getContext('2d');
     var myChart = new Chart(ctx, config);
 
     </script>

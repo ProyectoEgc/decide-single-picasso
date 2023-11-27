@@ -17,7 +17,7 @@
             <div class="navbar-brand" >Decide</div>
                 <ul class="navbar-nav ml-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                       <a href="/"><button class="btn btn-secondary">Inicio</button></a>
+                       <a href="/"><button class="btn btn-secondary">{% trans "Inicio" %}</button></a>
                     </li>
                     <li class="nav-item" v-if="!signup">
                         <button v-on:click="decideLogout" class="btn btn-secondary">{% trans "Logout" %}</button>
@@ -69,7 +69,7 @@
                 <path fill-rule="evenodd" d="M11.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H1.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z"/>
             </svg>
             <div class="ms-2">
-                ¡Debe iniciar sesión para poder acceder a la votación!
+                {% trans "You must be logged in to access the vote!" %}
             </div>
         </div>
         <div class="container-fluid">
