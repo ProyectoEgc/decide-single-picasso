@@ -10,59 +10,74 @@
 {% block content %}
 <nav class="navbar navbar-dark bg-secondary">
     <div class="container-fluid">
-        <div class="navbar-brand">Decide</div>
+        <div class="navbar-brand">{% trans "Decide" %}</div>
         <div class="float-end">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item" v-if="!signup">
-                    <a href="/authentication/logout-view"><button class="btn btn-secondary">Logout</button></a>
+                    <a href="/authentication/logout-view"><button class="btn btn-secondary">{% trans "Logout" %}</button></a>
                 </li>
+                <form action="{% url 'set_language' %}" method="post" class="d-flex align-items-center">
+                    {% csrf_token %}
+                    <div class="input-group">
+                        <input name="next" type="hidden" value="{{ redirect_to }}" />
+                        <select name="language" class="form-select" onchange="this.form.submit()">
+                            {% get_current_language as LANGUAGE_CODE %}
+                            {% get_available_languages as LANGUAGES %}
+                            {% get_language_info_list for LANGUAGES as languages %}
+                            {% for language in languages %}
+                                <option value="{{ language.code }}" {% if language.code == LANGUAGE_CODE %}selected{% endif %}>
+                                    {{ language.name_local }} ({{ language.code }})
+                                </option>
+                            {% endfor %}
+                        </select>
+                        <button type="submit" class="btn btn-primary ms-2">{% trans "Go" %}</button>
+                    </div>
+                </form>
             </ul>
         </div>
     </div>
 </nav>
 
 {% if votings|length == 0 %}
-<p class="lead">You don't have any votings to vote</p>
+<p class="lead">{% trans "You don't have any votings to vote" %}</p>
 {% endif %}
 {% if votings|length > 0 %}
 <div class="container-fluid mx-auto" style="margin-top: 25px;">
-    <h1 class="text-center">Open Votings</h1>
+    <h1 class="text-center">{% trans "Open Votings" %}</h1>
     <hr />
     <div class="row justify-content-center">
         {% for voting in votings %}
         <div class="col-3">
             <a class="nav-link" href="/booth/{{ voting.id }}">
                 <div class="card text-center">
-                    <h3 class="card-title">{{ voting.name }}</h1>
-                        <h4 class="card-subtitle mb-2 text-muted">{{ voting.question.desc }}</h2>
+                    <h3 class="card-title">{{ voting.name }}</h3>
+                    <h4 class="card-subtitle mb-2 text-muted">{{ voting.question.desc }}</h4>
                 </div>
             </a>
         </div>
         {% endfor %}
-
     </div>
 </div>
 {% endif %}
 
 {% if closed_votings|length == 0 %}
-<p class="lead">You don't have any closed voting</p>
+<p class="lead">{% trans "You don't have any closed voting" %}</p>
 {% endif %}
 {% if votings|length > 0 %}
 <div class="container-fluid mx-auto" style="margin-top: 25px;">
-    <h1 class="text-center">Closed Votings</h1>
+    <h1 class="text-center">{% trans "Closed Votings" %}</h1>
     <hr />
     <div class="row justify-content-center">
         {% for voting in closed_votings %}
         <div class="col-3">
             <a class="nav-link" href="/visualizer/{{ voting.id }}">
                 <div class="card text-center">
-                    <h3 class="card-title">{{ voting.name }}</h1>
-                        <h4 class="card-subtitle mb-2 text-muted">{{ voting.question.desc }}</h2>
+                    <h3 class="card-title">{{ voting.name }}</h3>
+                    <h4 class="card-subtitle mb-2 text-muted">{{ voting.question.desc }}</h4>
                 </div>
             </a>
         </div>
         {% endfor %}
-
     </div>
 </div>
 {% endif %}

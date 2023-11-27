@@ -28,6 +28,7 @@ from django.http import HttpResponse
 from census.models import Census
 from voting.models import Voting
 
+
 def home(request):
     return render(request,'home.html')
 
@@ -161,3 +162,10 @@ def logout_view(request):
         response.delete_cookie('token')
         response.delete_cookie('decide')
     return response
+
+def change_language(request, language_code):
+    if language_code in [lang[0] for lang in settings.LANGUAGES]:
+        request.session[translation.LANGUAGE_SESSION_KEY] = language_code
+        return redirect(request.META.get('HTTP_REFERER', '/'))
+    return redirect('/')
+
