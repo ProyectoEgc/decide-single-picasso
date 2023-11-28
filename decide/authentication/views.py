@@ -174,7 +174,7 @@ def is_safe_url(url):
         return False
 
 def change_language(request, language_code):
-    allowed_languages = [lang[0] for lang in translation.settings.LANGUAGES]
+    allowed_languages = [lang[0] for lang in LANGUAGES]
 
     if language_code in allowed_languages:
         request.session[translation.LANGUAGE_SESSION_KEY] = language_code
