@@ -116,13 +116,7 @@ def create_score_questions(self):
     options = QuestionOption.objects.all().filter(question=self)
     for o in options:
         o.delete()
-    option_1= QuestionOption(option='1', number=1, question=self)
-    option_1.save()
-    option_2= QuestionOption(option='2', number=2, question=self)
-    option_2.save()
-    option_3= QuestionOption(option='3', number=3, question=self)
-    option_3.save()
-    option_4= QuestionOption(option='4', number=4, question=self)
-    option_4.save()
-    option_5= QuestionOption(option='5', number=5, question=self)
-    option_5.save()
+    
+    for i in range(0,11):
+        option_i= QuestionOption(option=str(i), number=i, question=self)
+        option_i.save()
