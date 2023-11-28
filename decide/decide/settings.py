@@ -188,7 +188,4 @@ if os.path.exists("config.jsonnet"):
     for k, v in config.items():
         vars()[k] = v
 
-# Importación de traducción
-from django.utils.translation import gettext_lazy  as _
-
 INSTALLED_APPS = INSTALLED_APPS + MODULES

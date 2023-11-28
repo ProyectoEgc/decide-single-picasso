@@ -11,12 +11,9 @@ urlpatterns = [
     path('logout/', LogoutView.as_view()),
     path('getuser/', GetUserView.as_view()),
     path('register/', RegisterView.as_view()),
-    
-    # Agrega la ruta para cambiar el idioma
     path('i18n/', include('django.conf.urls.i18n')),
 ]
 
-# También puedes agregar una redirección desde la raíz del sitio a la URL de internacionalización
 urlpatterns += [
     path('', RedirectView.as_view(url='/i18n/', permanent=True)),
 ]
