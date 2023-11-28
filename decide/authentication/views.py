@@ -174,13 +174,11 @@ def is_safe_url(url):
         return False
 
 def change_language(request, language_code):
-    allowed_languages = [lang[0] for lang in LANGUAGES]
-    
+    allowed_languages = [lang[0] for lang in translation.settings.LANGUAGES]
+
     if language_code in allowed_languages:
-        referer_url = request.META.get('HTTP_REFERER', '/')
-        if referer_url.startswith(tuple(allowed_languages)):
-            request.session[translation.LANGUAGE_SESSION_KEY] = language_code
-            return redirect(referer_url)
+        request.session[translation.LANGUAGE_SESSION_KEY] = language_code
+        return redirect('/')
 
     return redirect('/')
 
