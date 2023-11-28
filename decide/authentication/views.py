@@ -27,6 +27,10 @@ from django.contrib.auth.models import User
 from django.http import HttpResponse
 from census.models import Census
 from voting.models import Voting
+from django.urls import resolve, Resolver404
+from django.utils import translation
+from decide.settings import LANGUAGES
+
 
 def home(request):
     return render(request,'home.html')
@@ -161,3 +165,20 @@ def logout_view(request):
         response.delete_cookie('token')
         response.delete_cookie('decide')
     return response
+
+def is_safe_url(url):
+    try:
+        resolve(url)
+        return True
+    except Resolver404:
+        return False
+
+def change_language(request, language_code):
+    allowed_languages = [lang[0] for lang in LANGUAGES]
+
+    if language_code in allowed_languages:
+        request.session[translation.LANGUAGE_SESSION_KEY] = language_code
+        return redirect('/')
+
+    return redirect('/')
+
