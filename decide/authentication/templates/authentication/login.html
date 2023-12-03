@@ -14,24 +14,24 @@
     <div class="d-flex mx-auto justify-content-center" style="margin-top: 10%;">
         <div class="card" style="width: 70%;">
             <div class="card-body">
-                <h1 class="card-title">Login</h1>
+                <h1 class="card-title">{% trans "Login" %}</h1>
                 <form action="" method="post">
                     {% csrf_token %}
                     <div class="fieldWrapper">
-                        <label for="id_username">Username:</label>
+                        <label for="id_username">{% trans "Username" %}:</label>
                         <input type="text" name="username" class="form-control mb-2" required="" id="id_username">
                     </div>
 
                     <div class="fieldWrapper">
-                        <label for="id_password1">Password:</label>
+                        <label for="id_password1">{% trans "Password" %}:</label>
                         <input type="password" name="password1" class="form-control mb-2" required="" id="id_password1">
                     </div>
                     <div class="row">
                         <div class="col-9">
-                            <input type="submit" class="btn btn-primary" value="Login">
+                            <input type="submit" class="btn btn-primary" value="{% trans "Login" %}">
                         </div>
                         <div class="col-3">
-                            <p style="margin-top: 15px;">Not registered? <a href="/signup">Sign up</a></p>
+                            <p style="margin-top: 15px;">{% trans "Not registered?" %} <a href="/signup">{% trans "Sign up" %}</a></p>
                         </div>
                     </div>
                     {% if error_message|length != 0 %}
