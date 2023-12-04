@@ -254,7 +254,7 @@ class VotingTestCase(BaseTestCase):
         q = Question(desc='Yes/No question test', type='B')
         q.save()
 
-        self.assertEquals(len(q.options.all()), 2)
+        self.assertEquals(q.options.all().count(), 2)
         self.assertEquals(q.type, 'B')
         self.assertEquals(q.options.all()[0].option, 'Sí')
         self.assertEquals(q.options.all()[1].option, 'No')
