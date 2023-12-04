@@ -272,7 +272,7 @@ class VotingTestCase(BaseTestCase):
         qo3 = QuestionOption(question = q, option = 'Third option')
         qo3.save()
 
-        self.assertEquals(len(q.options.all()), 2)
+        self.assertEquals(q.options.all().count(), 2)
         self.assertEquals(q.type, 'B')
         self.assertEquals(q.options.all()[0].option, 'Sí')
         self.assertEquals(q.options.all()[1].option, 'No')
