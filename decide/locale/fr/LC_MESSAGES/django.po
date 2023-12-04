@@ -1,0 +1,169 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-12-04 10:20-0600\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+#: authentication/templates/authentication/decide.html:13
+#: visualizer/templates/visualizer/visualizer.html:15
+msgid "Decide"
+msgstr "Decide"
+
+#: authentication/templates/authentication/decide.html:17
+#: booth/templates/booth/booth.html:23
+msgid "Logout"
+msgstr "Déconnexion"
+
+#: authentication/templates/authentication/decide.html:33
+msgid "Go"
+msgstr "Aller"
+
+#: authentication/templates/authentication/decide.html:42
+msgid "You don't have any votings to vote"
+msgstr "Vous n'avez aucun vote à effectuer"
+
+#: authentication/templates/authentication/decide.html:46
+msgid "Open Votings"
+msgstr "Votes ouverts"
+
+#: authentication/templates/authentication/decide.html:64
+msgid "You don't have any closed voting"
+msgstr "Vous n'avez aucun vote clos"
+
+#: authentication/templates/authentication/decide.html:68
+msgid "Closed Votings"
+msgstr "Votes clos"
+
+#: authentication/templates/authentication/login.html:17
+#: authentication/templates/authentication/login.html:31
+#: booth/templates/booth/booth.html:108
+msgid "Login"
+msgstr "Connexion"
+
+#: authentication/templates/authentication/login.html:21
+#: authentication/templates/signup.html:7 booth/templates/booth/booth.html:89
+msgid "Username"
+msgstr "Nom d'utilisateur"
+
+#: authentication/templates/authentication/login.html:26
+#: authentication/templates/signup.html:19 booth/templates/booth/booth.html:99
+msgid "Password"
+msgstr "Mot de passe"
+
+#: authentication/templates/authentication/login.html:34
+msgid "Not registered?"
+msgstr "Pas encore inscrit ?"
+
+#: authentication/templates/authentication/login.html:34
+msgid "Sign up"
+msgstr "S'inscrire"
+
+#: authentication/templates/signup.html:1
+msgid "Sign Up"
+msgstr "S'inscrire"
+
+#: authentication/templates/signup.html:10
+msgid "First name"
+msgstr "Prénom"
+
+#: authentication/templates/signup.html:13
+msgid "Last name"
+msgstr "Nom de famille"
+
+#: authentication/templates/signup.html:16
+msgid "Email"
+msgstr "Email"
+
+#: authentication/templates/signup.html:22
+msgid "Repeat password"
+msgstr "Répéter le mot de passe"
+
+#: authentication/templates/signup.html:25
+msgid "Send"
+msgstr "Envoyer"
+
+#: authentication/templates/signup.html:29
+msgid "Already registered?"
+msgstr "Déjà inscrit ?"
+
+#: authentication/templates/signup.html:29
+msgid "Return"
+msgstr "Retour"
+
+#: booth/templates/booth/booth.html:20
+msgid "Inicio"
+msgstr "Accueil"
+
+#: booth/templates/booth/booth.html:73
+msgid "You must be logged in to access the vote!"
+msgstr "Vous devez être connecté pour accéder au vote !"
+
+#: booth/templates/booth/booth.html:133
+msgid "Vote"
+msgstr "Voter"
+
+#: booth/templates/booth/booth.html:236 booth/templates/booth/booth.html:247
+#: booth/templates/booth/booth.html:283
+msgid "Error: "
+msgstr "Erreur : "
+
+#: booth/templates/booth/booth.html:279
+msgid "Congratulations. Your vote has been sent"
+msgstr "Félicitations. Votre vote a été envoyé"
+
+#: decide/settings.py:154
+msgid "English"
+msgstr "Anglais"
+
+#: decide/settings.py:155
+msgid "Spanish"
+msgstr "Espagnol"
+
+#: decide/settings.py:156
+msgid "French"
+msgstr "Français"
+
+#: visualizer/templates/visualizer/visualizer.html:19
+msgid "Home"
+msgstr "Accueil"
+
+#: visualizer/templates/visualizer/visualizer.html:30
+msgid "Voting not started"
+msgstr "Vote non commencé"
+
+#: visualizer/templates/visualizer/visualizer.html:31
+msgid "Voting in progress"
+msgstr "Vote en cours"
+
+#: visualizer/templates/visualizer/visualizer.html:37
+msgid "Option"
+msgstr "Option"
+
+#: visualizer/templates/visualizer/visualizer.html:38
+msgid "Score"
+msgstr "Score"
+
+#: visualizer/templates/visualizer/visualizer.html:39
+msgid "Votes"
+msgstr "Votes"
+
+#: visualizer/templates/visualizer/visualizer.html:50
+msgid "Charts"
+msgstr "Graphiques"
+
+#: visualizer/templates/visualizer/visualizer.html:99
+msgid "'Voting Results'"
+msgstr "'Résultats du vote'"
