@@ -63,7 +63,7 @@
 {% if closed_votings|length == 0 %}
 <p class="lead">{% trans "You don't have any closed voting" %}</p>
 {% endif %}
-{% if votings|length > 0 %}
+{% if closed_votings|length > 0 %}
 <div class="container-fluid mx-auto" style="margin-top: 25px;">
     <h1 class="text-center">{% trans "Closed Votings" %}</h1>
     <hr />
