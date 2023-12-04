@@ -232,6 +232,50 @@ class VotingTestCase(BaseTestCase):
         voting = Voting.objects.get(name='Example')
         self.assertEqual(voting.desc, 'Description example')
 
+
+    
+    def test_create_score_question(self):
+        q = Question(desc='Score question test', type='S')
+        q.save()
+        self.assertEquals(len(q.options.all()), 11)
+        self.assertEquals(q.type, 'S')
+        for i in range(0, 11):
+            if(i==0):
+                self.assertEquals(q.options.all()[i].option, str(i))
+                self.assertEquals(q.options.all()[i].number, 11)
+            else:
+                self.assertEquals(q.options.all()[i].option, str(i))
+                self.assertEquals(q.options.all()[i].number, i)
+
+    def test_create_score_question_creating_other_options(self):
+        q = Question(desc='Score question test', type='S')
+        q.save()
+
+        q01=QuestionOption(question= q, option = "Probando")
+        q01.save()
+        q02=QuestionOption(question= q, option = "Seguimos probando")
+        q02.save()
+        q03=QuestionOption(question= q, option = "Creando preguntas")
+        q03.save()
+        q04=QuestionOption(question= q, option = "Para")
+        q04.save()
+        q05=QuestionOption(question= q, option = "Tests")
+        q05.save()
+
+        q.save()
+        self.assertEquals(len(q.options.all()), 11)
+        self.assertEquals(q.type, 'S')
+
+        for i in range(0, 11):
+            if(i==0):
+                self.assertEquals(q.options.all()[i].option, str(i))
+                self.assertEquals(q.options.all()[i].number, 11)
+            else:
+                self.assertEquals(q.options.all()[i].option, str(i))
+                self.assertEquals(q.options.all()[i].number, i)
+        
+        
+    
     def test_update_voting_405(self):
         v = self.create_voting()
         data = {} #El campo action es requerido en la request
