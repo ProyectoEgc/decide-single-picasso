@@ -118,5 +118,9 @@ def create_score_questions(self):
         o.delete()
     
     for i in range(0,11):
-        option_i= QuestionOption(option=str(i), number=i, question=self)
-        option_i.save()
+        if(i == 0):
+            option_i = QuestionOption(option=str(i), number =11, question=self)
+            option_i.save()
+        else:
+            option_i= QuestionOption(option=str(i), number=i, question=self)
+            option_i.save()
