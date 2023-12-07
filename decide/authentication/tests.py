@@ -156,6 +156,18 @@ class LanguageSwitchViewTest(TestCase):
 
         self.assertEqual(response.context['LANGUAGE_CODE'], 'es')
 
+    def test_language_french(self):
+        initial_language = 'en'
+
+        url = reverse('set_language')
+
+        response = self.client.post(url, {'language': 'fr', 'next': '/'}, follow=True)
+
+        self.assertEqual(response.status_code, 200)
+
+        self.assertEqual(response.context['LANGUAGE_CODE'], 'fr')
+
+
     
 
 
