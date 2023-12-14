@@ -113,7 +113,8 @@ def create_yes_no_question(self):
 
 def create_multitask_question(self):
     options = QuestionOption.objects.all().filter(question=self)
-    selected_options=[]
+    selected_options = []
     for o in options:
         option = QuestionOption(option=o.option, number=o.number, question=self)
         selected_options.append(option)
+        option.save()
