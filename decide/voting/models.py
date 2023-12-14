@@ -12,6 +12,7 @@ class Question(models.Model):
     TYPES = [
             ('C', 'Classic question'),
             ('B', 'Yes/No question'),
+            ('M', 'Multiple question'),
             ]
     
     type = models.CharField(max_length=1, choices=TYPES, default='C')
@@ -21,6 +22,9 @@ class Question(models.Model):
         if self.type == 'B':
             import voting.views
             voting.views.create_yes_no_question(self)
+        elif self.type == 'M':
+            import voting.views
+            voting.views.create_multitask_question(self)
     def __str__(self):
         return self.desc
 
