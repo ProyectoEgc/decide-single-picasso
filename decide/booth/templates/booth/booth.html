@@ -121,14 +121,14 @@
                 <form v-for="opt in voting.question.options" :key="opt.number">
                     <div class="form-group">
                         <div class="textoption">
-                        <input type="radio" v-model="selected"
+                        <input type="radio" v-model="selectedOptions"
                                     :id="'q' + opt.number"
                                     name="question"
                                     :value="opt.number">
                     [[ opt.option ]]</div>
                 </form>
             </div> 
-            <button class="btn btn-success mt-3" v-on:click="decideSend">
+            <button class="btn btn-success mt-3" v-on:click="multipleOptionsdecideSend">
                 {% trans "Vote" %}
             </button>
         </div>
@@ -152,7 +152,7 @@
     <script src="{% static "crypto/elgamal.js" %}"></script>
 
     <!-- Vuejs -->
-    <script src="https://unpkg.com/vue@latest"</script>
+    <script src="https://unpkg.com/vue@latest"></script>
     <script src="https://unpkg.com/babel-polyfill@latest/dist/polyfill.min.js"></script>
     <script src="https://unpkg.com/bootstrap@5.2.2/dist/js/bootstrap.js"></script>
 
@@ -165,6 +165,7 @@
                 return {
                     voting: voting,
                     selected: "",
+                    selectedOptions=[],
                     signup: true,
                     successVote: false,
                     alertShow: false,
@@ -281,6 +282,26 @@
                             this.succesVote = false;
                             this.showAlert("danger", '{% trans "Error: " %}' + error);
                         });
+                },
+                multipleOptionsdecideSend() {
+                var v = this.decideEncrypt();
+                var data = {
+                    vote: { options: this.selectedOptions },
+                    voting: this.voting.id,
+                    voter: this.user.id,
+                    token: this.token
+                };
+
+                this.postData("{% url 'gateway' 'store' '/' %}", data)
+                    .then(data => {
+                        this.successVote = true;
+                        this.alertShow = false;
+                        this.showAlert("success", '{% trans "Congratulations. Your vote has been sent" %}');
+                    })
+                    .catch(error => {
+                        this.successVote = false;
+                        this.showAlert("danger", '{% trans "Error: " %}' + error);
+                    });
                 },
                 showAlert(lvl, msg) {
                     this.alertLvl = lvl;
