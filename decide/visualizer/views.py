@@ -30,17 +30,21 @@ class VisualizerView(TemplateView):
     
     def score_average(self, voting_id):
         voting = get_object_or_404(Voting, id=voting_id)
-        ac = 0
-        number_votes = 0
-    
-        for opt in voting.postproc:
-            option = int(opt['option'])
-            votes = int(opt['votes'])
-            ac = ac + option*votes
-            number_votes = number_votes + votes
-    
-        promedio = ac / number_votes
-    
+        if(voting.question.type == 'S'):
+            
+            ac = 0
+            number_votes = 0
+        
+            for opt in voting.postproc:
+                option = int(opt['option'])
+                votes = int(opt['votes'])
+                ac = ac + option*votes
+                number_votes = number_votes + votes
+        
+            promedio = ac / number_votes
+        else:
+            promedio = -1
+        
         return promedio
     
 
