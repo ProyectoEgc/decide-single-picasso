@@ -37,7 +37,8 @@ def query(modname, entry_point='/', method='get', baseurl=None, **kwargs):
 
     q = getattr(requests, method)
     url = '{}/{}{}'.format(mod, modname, entry_point)
-
+    print(url)
+    print(mod)
     headers = {}
     if 'HTTP_AUTHORIZATION' in kwargs:
         headers['Authorization'] = kwargs['HTTP_AUTHORIZATION']
