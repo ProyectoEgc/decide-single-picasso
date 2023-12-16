@@ -293,6 +293,36 @@ class VotingTestCase(BaseTestCase):
         #Verifica que la primera opcion es option1 (2)
         self.assertEquals(str(v.question.options.all()[0]),"option 1 (2)")
 
+    # Testing yes/no question feature
+    def test_create_yes_no_question(self):
+        q = Question(desc='Yes/No question test', type='B')
+        q.save()
+
+        self.assertEquals(q.options.all().count(), 2)
+        self.assertEquals(q.type, 'B')
+        self.assertEquals(q.options.all()[0].option, 'Sí')
+        self.assertEquals(q.options.all()[1].option, 'No')
+        self.assertEquals(q.options.all()[0].number, 1)
+        self.assertEquals(q.options.all()[1].number, 2)
+
+    # Adding options other than yes and no manually
+    def test_create_yes_no_question_with_other_options(self):
+        q = Question(desc='Yes/No question test', type='B')
+        q.save()
+        qo1 = QuestionOption(question = q, option = 'First option')
+        qo1.save()
+        qo2 = QuestionOption(question = q, option = 'Second option')
+        qo2.save()
+        qo3 = QuestionOption(question = q, option = 'Third option')
+        qo3.save()
+
+        self.assertEquals(q.options.all().count(), 2)
+        self.assertEquals(q.type, 'B')
+        self.assertEquals(q.options.all()[0].option, 'Sí')
+        self.assertEquals(q.options.all()[1].option, 'No')
+        self.assertEquals(q.options.all()[0].number, 1)
+        self.assertEquals(q.options.all()[1].number, 2)
+
 class LogInSuccessTests(StaticLiveServerTestCase):
 
     def setUp(self):

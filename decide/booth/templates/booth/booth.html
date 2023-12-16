@@ -112,36 +112,54 @@
             </div>
         </div>
 
-        <!-- Voting -->
+ <!-- Voting -->
         <div v-if="!signup" class="d-flex text-center justify-content-center">
             <div class="card" style="width: 80%;">
                 <h1 class="card-title">[[ voting.name ]]</h1>
                 <hr />
                 <h2 class="card-subtitle mb-2 text-muted">[[ voting.question.desc ]]</h2>
-                <form v-for="opt in voting.question.options" :key="opt.number">
-                    <div class="form-group">
-                        <div class="textoption">
-                        {% if voting.question.type == 'Score' %}
-                        <input type="radio" v-model="selected"
+                <div v-if="voting.question.type === 'B' || voting.question.type === 'C'">
+                    <form v-for="opt in voting.question.options" :key="opt.number">
+                        <div class="form-group">
+                            <div class="textoption">
+                            {% if voting.question.type == 'Score' %}
+                            <input type="radio" v-model="selected"
                                     :id="'q' + opt.number"
                                     name="question"
                                     :value="opt.number">
-                        {% else %}
-                        <input type="radio" v-model="selected"
+                            {% else %}
+                            <input type="radio" v-model="selected"
                                     :id="'q' + opt.number"
                                     name="question"
                                     :value="opt.number">
-                        {% endif %}
-                    [[ opt.option ]]</div>
-                </form>
-            </div> 
-            <button class="btn btn-success mt-3" v-on:click="decideSend">
-                {% trans "Vote" %}
-            </button>
+                            {% endif %}
+                            [[ opt.option ]]
+                            </div>
+                        </div>
+                    </form>
+                    <button class="btn btn-success mt-3" v-on:click="decideSend">
+                        {% trans "Vote" %}
+                    </button>
+                </div>
+                <div v-if="voting.question.type === 'm'">
+                    <form v-for="opt in voting.question.options" :key="opt.number">
+                        <div  class="form-group">
+                            <div class="textoption">
+                            <input type="checkbox" v-model="selectedOptions"  
+                                :id="'q' + opt.number"
+                                name="multiple"
+                                :value="opt.number">
+                            [[ opt.option ]]
+                            </div>
+                        </div>
+                    </form>
+                    <button class="btn btn-primary mt-3" v-on:click="multipleOptionsDecideSend">
+                        {% trans "Vote" %}
+                    </button>
+                </div>
+            </div>
         </div>
-
     </div>
-
 </div>
     
 {% endblock %}
@@ -159,7 +177,7 @@
     <script src="{% static "crypto/elgamal.js" %}"></script>
 
     <!-- Vuejs -->
-    <script src="https://unpkg.com/vue@latest"</script>
+    <script src="https://unpkg.com/vue@latest"></script>
     <script src="https://unpkg.com/babel-polyfill@latest/dist/polyfill.min.js"></script>
     <script src="https://unpkg.com/bootstrap@5.2.2/dist/js/bootstrap.js"></script>
 
@@ -172,6 +190,7 @@
                 return {
                     voting: voting,
                     selected: "",
+                    selectedOptions: [],
                     signup: true,
                     successVote: false,
                     alertShow: false,
@@ -269,6 +288,12 @@
                     var cipher = ElGamal.encrypt(this.bigpk, bigmsg);
                     return cipher;
                 },
+                decideMultipleOptionEncrypt() {
+                    var separator = parseInt(this.selectedOptions.join("666"))
+                    var bigmsg = BigInt.fromJSONObject(separator.toString());
+                    var cipher = ElGamal.encrypt(this.bigpk, bigmsg);
+                    return cipher;
+                },
                 decideSend(evt) {
                     evt.preventDefault();
                     var v = this.decideEncrypt();
@@ -288,6 +313,32 @@
                             this.succesVote = false;
                             this.showAlert("danger", '{% trans "Error: " %}' + error);
                         });
+                },
+                multipleOptionsDecideSend(evt) {
+                    evt.preventDefault();
+                    if (this.selectedOptions.length === 0) {
+                        this.showAlert("danger", '{% trans "Error: Please select at least one option." %}');
+                        return;
+                    }
+                    var votes = this.decideMultipleOptionEncrypt();
+                    var data = {
+                        vote: {a: votes.alpha.toString(), b: votes.beta.toString()},
+                        voting: this.voting.id,
+                        voter: this.user.id,
+                        token: this.token
+                    };
+
+                    this.postData("{% url "gateway" "store" "/" %}", data)
+                        .then(data => {
+                            this.successVote = true;
+                            this.alertShow = false;
+                            this.showAlert("success", '{% trans "Congratulations. Your vote has been sent" %}');
+                        })
+                        .catch(error => {
+                            this.succesVote = false;
+                            this.showAlert("danger", '{% trans "Error: " %}' + error);
+                        });
+                        
                 },
                 showAlert(lvl, msg) {
                     this.alertLvl = lvl;

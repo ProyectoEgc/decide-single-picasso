@@ -6,16 +6,17 @@ from django.dispatch import receiver
 from base import mods
 from base.models import Auth, Key
 
+class Types(models.TextChoices):
+        
+    CLASSIC_QUESTION = 'C', 'Classic question'
+    YES_NO_QUESTION = 'B','Yes/No question'
+    MULTIPLE_OPTIONS_QUESTION = 'm','Multiple options question'
+    SCORED_QUESTION = 'S', 'Score question'
 
 class Question(models.Model):
-    desc = models.TextField()
-    TYPES = [
-        ('C', 'Classic question'),
-        ('B', 'Yes/No question'),
-        ('S', 'Score question')
-    ]
-    
-    type = models.CharField(max_length=1, choices=TYPES, default='C')
+    desc = models.TextField()  
+    type = models.CharField(max_length=1, choices=Types.choices, default=Types.CLASSIC_QUESTION)
+
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
@@ -128,7 +129,43 @@ class Voting(models.Model):
         self.tally = response.json()
         self.save()
 
-        self.do_postproc()
+        if self.question.type == 'm':
+            self.do_postproc_multiple_options_question()
+        else:
+            self.do_postproc()
+
+    def do_postproc_multiple_options_question(self):
+
+        tally = self.tally
+        options = self.question.options.all()
+        all_votes= []
+
+        for voto in tally:
+            voto = str(voto)
+            votos = voto.split('666')
+            for voto in votos:
+                try:
+                    all_votes.append(int(voto))
+                except ValueError:
+                    pass
+
+        opts = []
+        for opt in options:
+            if isinstance(all_votes, list):
+                votes = all_votes.count(opt.number)
+            else:
+                votes = 0
+            opts.append({
+                'option': opt.option,
+                'number': opt.number,
+                'votes': votes
+            })
+
+        data = { 'type': 'IDENTITY', 'options': opts }
+        postp = mods.post('postproc', json=data)
+
+        self.postproc = postp
+        self.save()       
 
     def do_postproc(self):
         tally = self.tally
