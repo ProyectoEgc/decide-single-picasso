@@ -1,9 +1,9 @@
-IssueType(status): Issue's title
+IssueType(status): Commit's title
 Description 
 
 ###Formato de Commit:
 
-#Tipo de commit(estado): Titulo de issue
+#Tipo de commit(estado): Titulo de commit
 #Breve descripción
 
 ###Tipos de Commit:

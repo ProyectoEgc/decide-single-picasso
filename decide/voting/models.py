@@ -11,18 +11,27 @@ class Types(models.TextChoices):
     CLASSIC_QUESTION = 'C', 'Classic question'
     YES_NO_QUESTION = 'B','Yes/No question'
     MULTIPLE_OPTIONS_QUESTION = 'm','Multiple options question'
+    SCORED_QUESTION = 'S', 'Score question'
 
 class Question(models.Model):
     desc = models.TextField()  
     type = models.CharField(max_length=1, choices=Types.choices, default=Types.CLASSIC_QUESTION)
 
-    def save(self):
-        super().save()
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
         if self.type == 'B':
             import voting.views
             voting.views.create_yes_no_question(self)
+        
+        if self.type == 'S':
+            import voting.views
+            voting.views.create_score_questions(self)
+            
     def __str__(self):
         return self.desc
+
+
 
 
 class QuestionOption(models.Model):
@@ -30,7 +39,7 @@ class QuestionOption(models.Model):
     number = models.PositiveIntegerField(blank=True, null=True)
     option = models.TextField()
 
-    def save(self):
+    def save(self, *args, **kwargs):
         if self.question.type == 'B':
             if not self.option == 'Sí' and not self.option == 'No':
                 return ""
