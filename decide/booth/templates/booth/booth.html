@@ -118,21 +118,21 @@
                 <h1 class="card-title">[[ voting.name ]]</h1>
                 <hr />
                 <h2 class="card-subtitle mb-2 text-muted">[[ voting.question.desc ]]</h2>
-                <div v-if="voting.question.type === 'B' || voting.question.type === 'C'">
+                <div v-if="voting.question.type === 'B' || voting.question.type === 'C' || voting.question.type === 'S'">
                     <form v-for="opt in voting.question.options" :key="opt.number">
                         <div class="form-group">
-                            <div class="textoption">
-                            {% if voting.question.type == 'Score' %}
+                            <div v-if="voting.question.type === 'S'" class="textoption">
+                                <input type="radio" v-model="selected"
+                                    :id="'q' + opt.number"
+                                    name="question"
+                                    :value="opt.number">
+                            [[ opt.option ]]
+                            </div>
+                            <div v-if="voting.question.type === 'B' || voting.question.type === 'C'" class="textoption">
                             <input type="radio" v-model="selected"
                                     :id="'q' + opt.number"
                                     name="question"
                                     :value="opt.number">
-                            {% else %}
-                            <input type="radio" v-model="selected"
-                                    :id="'q' + opt.number"
-                                    name="question"
-                                    :value="opt.number">
-                            {% endif %}
                             [[ opt.option ]]
                             </div>
                         </div>

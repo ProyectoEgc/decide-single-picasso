@@ -1,4 +1,4 @@
-IssueType(status): Issue's title
+IssueType(status): Commit's title
 Description 
 
 ###Formato de Commit:
