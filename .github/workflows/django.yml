@@ -42,13 +42,18 @@ jobs:
       run: |
         cd decide
         python send_email.py
-    - name:
+    - name: requerimientos
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
         pip install codacy-coverage
         cp decide/local_settings.gactions.py decide/local_settings.py
         sudo apt install chromium-browser chromium-chromedriver
+    - name: Set up ChromeDriver path
+      run: |
+        export CHROME_BIN=/usr/bin/google-chrome
+        export CHROMEDRIVER_BIN=/usr/bin/chromedriver
+
     - name: Run migrations
       run: |
         cd decide
