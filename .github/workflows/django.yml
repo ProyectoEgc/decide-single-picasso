@@ -30,7 +30,9 @@ jobs:
         env:
           USER_EMAIL: ${{ secrets.USER_EMAIL }}
           USER_PASSWORD: ${{ secrets.USER_PASSWORD }}
-        run: python send_email.py
+        run: |
+          cd decide
+          python send_email.py
 
       - name: Set up PostgreSQL
         uses: docker://postgres:11.18-bullseye
