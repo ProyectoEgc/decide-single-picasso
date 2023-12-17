@@ -8,7 +8,6 @@ on:
     branches:
       - develop
       - master
-      - FEATURE32/carnucbol
 
 jobs:
   build:
