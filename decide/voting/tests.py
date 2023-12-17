@@ -137,7 +137,8 @@ class VotingTestCase(BaseTestCase):
             'name': 'Example',
             'desc': 'Description example',
             'question': 'I want a ',
-            'question': ['cat', 'dog', 'horse']
+            'question_opt': ['cat', 'dog', 'horse'],
+            'image': 'Image.jpeg'
         }
 
         response = self.client.post('/voting/', data, format='json')
@@ -227,7 +228,8 @@ class VotingTestCase(BaseTestCase):
             'name': 'Example',
             'desc': 'Description example',
             'question': 'I want a ',
-            'question_opt': ['cat', 'dog', 'horse']
+            'question_opt': ['cat', 'dog', 'horse'],
+            'image': 'Image.jpeg'
         }
 
         response = self.client.post('/voting/', data, format='json')
@@ -275,9 +277,6 @@ class VotingTestCase(BaseTestCase):
             else:
                 self.assertEquals(q.options.all()[i].option, str(i))
 
-        
-        
-    
     def test_update_voting_405(self):
         v = self.create_voting()
         data = {} #El campo action es requerido en la request
