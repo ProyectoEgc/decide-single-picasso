@@ -37,7 +37,6 @@ class TestRegister(StaticLiveServerTestCase):
 
   def test_negative_register(self):
     self.driver.get(f"{self.live_server_url}/signup/")
-    self.driver.set_window_size(450, 700)
     self.driver.find_element(By.ID, "username").click()
     self.driver.find_element(By.ID, "username").send_keys("test")
     self.driver.find_element(By.ID, "first_name").click()

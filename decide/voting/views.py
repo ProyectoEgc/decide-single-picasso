@@ -41,20 +41,16 @@ class VotingView(generics.ListCreateAPIView):
         question = Question(desc=request.data.get('question'))
         question.save()
 
-        for idx, q_opt in enumerate(request.data.get('question_opt')):
-            opt = QuestionOption(question=question, option=q_opt, number=idx,)
-            opt.save()
-
-        # Guardar la imagen
+         # Guardar la imagen
         image_file = request.data['image']
-        image_path = os.path.join(settings.MEDIA_ROOT, 'images', image_file.name)
+        image_path = os.path.join(settings.MEDIA_ROOT, 'images', image_file)
 
-        with open(image_path, 'wb') as image_destination:
-            for chunk in image_file.chunks():
-                image_destination.write(chunk)
-                
+        for idx, q_opt in enumerate(request.data.get('question_opt')):
+            opt = QuestionOption(question=question, option=q_opt, number=idx, image=image_path)
+            opt.save()
+   
         voting = Voting(name=request.data.get('name'), desc=request.data.get('desc'),
-                        question=question, image=image_file)
+                        question=question)
         voting.save()
 
         auth, _ = Auth.objects.get_or_create(url=settings.BASEURL, defaults={'me': True, 'name': 'test auth'})
@@ -137,3 +133,4 @@ def create_score_questions(self):
         else:
             option_i= QuestionOption(option=str(i), question=self)
             option_i.save()
+

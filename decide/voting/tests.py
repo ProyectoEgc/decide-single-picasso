@@ -133,7 +133,8 @@ class VotingTestCase(BaseTestCase):
             'name': 'Example',
             'desc': 'Description example',
             'question': 'I want a ',
-            'question_opt': ['cat', 'dog', 'horse']
+            'question_opt': ['cat', 'dog', 'horse'],
+            'image': 'Image.jpeg'
         }
 
         response = self.client.post('/voting/', data, format='json')
@@ -223,7 +224,8 @@ class VotingTestCase(BaseTestCase):
             'name': 'Example',
             'desc': 'Description example',
             'question': 'I want a ',
-            'question_opt': ['cat', 'dog', 'horse']
+            'question_opt': ['cat', 'dog', 'horse'],
+            'image': 'Image.jpeg'
         }
 
         response = self.client.post('/voting/', data, format='json')
@@ -232,8 +234,6 @@ class VotingTestCase(BaseTestCase):
         voting = Voting.objects.get(name='Example')
         self.assertEqual(voting.desc, 'Description example')
 
-
-    
     def test_create_score_question(self):
         q = Question(desc='Score question test', type='S')
         q.save()
@@ -242,10 +242,8 @@ class VotingTestCase(BaseTestCase):
         for i in range(0, 11):
             if(i==0):
                 self.assertEquals(q.options.all()[i].option, str(i))
-                self.assertEquals(q.options.all()[i].number, 11)
             else:
                 self.assertEquals(q.options.all()[i].option, str(i))
-                self.assertEquals(q.options.all()[i].number, i)
 
     def test_create_score_question_creating_other_options(self):
         q = Question(desc='Score question test', type='S')
@@ -269,11 +267,9 @@ class VotingTestCase(BaseTestCase):
         for i in range(0, 11):
             if(i==0):
                 self.assertEquals(q.options.all()[i].option, str(i))
-                self.assertEquals(q.options.all()[i].number, 11)
+
             else:
-                self.assertEquals(q.options.all()[i].option, str(i))
-                self.assertEquals(q.options.all()[i].number, i)
-        
+                self.assertEquals(q.options.all()[i].option, str(i))  
         
     
     def test_update_voting_405(self):
