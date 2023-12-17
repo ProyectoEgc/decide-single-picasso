@@ -36,9 +36,8 @@ class TestSeleniumnegativecreatequestion(StaticLiveServerTestCase):
     self.driver.get(f'{self.live_server_url}/admin/')
     self.driver.find_element(By.ID,'id_username').send_keys("miusuario")
     self.driver.find_element(By.ID,'id_password').send_keys("micontraseña",Keys.ENTER)
-    #Verifica que nos hemos logado porque aparece la barra de herramientas superior
     self.assertTrue(len(self.driver.find_elements(By.ID, 'user-tools'))==1)
-    time.sleep(5)
+    time.sleep(2)
     self.driver.find_element(By.LINK_TEXT, "Questions").click()
     self.driver.find_element(By.CSS_SELECTOR, "li > .addlink").click()
     self.driver.find_element(By.ID, "id_options-0-option").click()
@@ -48,4 +47,8 @@ class TestSeleniumnegativecreatequestion(StaticLiveServerTestCase):
     self.driver.find_element(By.ID, "id_options-2-option").click()
     self.driver.find_element(By.ID, "id_options-2-option").send_keys("no valido")
     self.driver.find_element(By.NAME, "_save").click()
-  
+    time.sleep(5)
+    wait = WebDriverWait(self.driver, 10)
+    error_message_element = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, ".errorlist li")))
+    # Assert that the error message is displayed
+    self.assertTrue(error_message_element.is_displayed(), "Por favor corrija el siguiente error.")
