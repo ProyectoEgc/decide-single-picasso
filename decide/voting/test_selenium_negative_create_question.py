@@ -14,7 +14,6 @@ from django.contrib.auth.models import User
 
 class TestSeleniumnegativecreatequestion(StaticLiveServerTestCase):
   def setUp(self):
-    self.databases = 'test'
     self.base = BaseTestCase()
     self.base.setUp()
     options = webdriver.ChromeOptions()

@@ -15,7 +15,6 @@ from django.contrib.auth.models import User
 class AdminTestCase(StaticLiveServerTestCase):
 
   def setUp(self):
-    self.databases = 'test'
     self.base = BaseTestCase()
     self.base.setUp()
     options = webdriver.ChromeOptions()
