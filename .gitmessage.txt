@@ -1,22 +1,20 @@
-tipo: asunto #id
+IssueType(status): Commit's title
+Description 
 
-cuerpo
+###Formato de Commit:
 
-### tipo
-# feat (nueva funcionalidad)
-# fix (corrección de bugs)
-# research (incorporación de código experimental, puede ser no funcional)
-# refactor (refactorización de código)
-# docs (actualización de documentación)
-# test (incorporación o modificación de tests)
-# conf (modificación de archivos de configuración)
+#Tipo de commit(estado): Titulo de commit
+#Breve descripción
 
-### asunto
-# Consiste en una breve descripción del problema que se ha tratado y que debe de comenzar con un verbo en participio. 
-# Se referenciará la issue correspondiente (en caso de existir) tal que: `#<ID_issue>`
+###Tipos de Commit:
 
-### cuerpo (opcional)
-# Se utilizará en caso de que el asunto no sea suficientemente descriptivo.
+#add: se genera una nueva funcionalidad
+#fix: se soluciona un bug
+#refactor: refactorización y mejoras
+#delete: se eliminan funciones y servicios
+#docs: se genera cambios de la documentación
 
-### Ejemplo
-# conf : Actualizado docker-compose.yml #1
+###Estados de Commit:
+#initial: es el primer commit para esa issue
+#update: si se modifica algo pero aun no esta finalizada la issue
+#end: se termina la issue

@@ -8,6 +8,12 @@ from rest_framework.authtoken.models import Token
 from base import mods
 from base.tests import BaseTestCase
 
+from django.urls import reverse
+from django.utils import translation
+from django.utils.translation import *
+from django.views.i18n import set_language
+
+
 
 class AuthTestCase(APITestCase):
 
@@ -136,3 +142,33 @@ class SimpleTest(BaseTestCase):
         Tests that 1 + 1 always equals 2.
         """
         self.assertEqual(1 + 1, 2)    
+
+class LanguageSwitchViewTest(TestCase):
+
+    def test_language_spanish(self):
+        initial_language = 'en'
+
+        url = reverse('set_language')
+
+        response = self.client.post(url, {'language': 'es', 'next': '/'}, follow=True)
+
+        self.assertEqual(response.status_code, 200)
+
+        self.assertEqual(response.context['LANGUAGE_CODE'], 'es')
+
+    def test_language_french(self):
+        initial_language = 'en'
+
+        url = reverse('set_language')
+
+        response = self.client.post(url, {'language': 'fr', 'next': '/'}, follow=True)
+
+        self.assertEqual(response.status_code, 200)
+
+        self.assertEqual(response.context['LANGUAGE_CODE'], 'fr')
+
+
+    
+
+
+
