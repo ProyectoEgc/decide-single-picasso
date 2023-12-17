@@ -47,8 +47,13 @@
                         </tr>
                     </tbody>
                 </table>
+                {% if promedio >= 0 %}
+                    <h1>{% trans "The average is" %}</h1>
+                    <p> {{ promedio }}</p>
+                {% endif %}
                 <h2 class="heading">{% trans "Charts" %}:</h2>
                 <canvas id="myChart" height="auto" width="auto"></canvas>
+                
             </div>
             </div>
 
