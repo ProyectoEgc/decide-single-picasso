@@ -17,12 +17,26 @@ jobs:
         pyversion: ['3.8', '3.9']
 
     runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:11.18-bullseye
+        env:
+          POSTGRES_USER: decide
+          POSTGRES_PASSWORD: decide
+          POSTGRES_DB: decide
+        ports:
+          - 5432:5432
+        # needed because the postgres container does not provide a healthcheck
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+
+
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Set up Python ${{matrix.pyversion}}
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4
         with:
           python-version: ${{matrix.pyversion}}
 
@@ -33,15 +47,6 @@ jobs:
         run: |
           cd decide
           python send_email.py
-
-      - name: Set up PostgreSQL
-        uses: docker://postgres:11.18-bullseye
-        env:
-          POSTGRES_USER: decide
-          POSTGRES_PASSWORD: decide
-          POSTGRES_DB: decide
-        with:
-          healthcheck: "pg_isready -U decide"
 
       - name: psycopg2 prerequisites
         run: sudo apt-get install libpq-dev
