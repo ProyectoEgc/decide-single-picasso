@@ -35,15 +35,25 @@ jobs:
     - name: psycopg2 prerequisites
       run: sudo apt-get install libpq-dev
     - name: Install dependencies and config
+      env:
+        USER_EMAIL: ${{ secrets.USER_EMAIL }}
+        USER_PASSWORD: ${{ secrets.USER_PASSWORD }}
+
+      run: |
+        cd decide
+        python send_email.py
+
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
         pip install codacy-coverage
         cp decide/local_settings.gactions.py decide/local_settings.py
-    - name: Run migrations (unnecessary)
+        sudo apt install chromium-browser chromium-chromedriver
+    - name: Run migrations
       run: |
         cd decide
         python manage.py migrate
+        python manage.py migrate --database=test
     - name: Run tests
       run: |
         cd decide
