@@ -41,7 +41,7 @@ class VotingView(generics.ListCreateAPIView):
         question = Question(desc=request.data.get('question'))
         question.save()
 
-         # Guardar la imagen
+        # Guardar la imagen
         image_file = request.data['image']
         image_path = os.path.join(settings.MEDIA_ROOT, 'images', image_file)
 
