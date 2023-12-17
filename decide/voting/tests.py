@@ -269,7 +269,7 @@ class VotingTestCase(BaseTestCase):
                 self.assertEquals(q.options.all()[i].option, str(i))
 
             else:
-                self.assertEquals(q.options.all()[i].option, str(i))  
+                self.assertEquals(q.options.all()[i].option, str(i))
         
     
     def test_update_voting_405(self):
