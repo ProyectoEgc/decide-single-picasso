@@ -61,6 +61,7 @@ jobs:
       - name: Run migrations (unnecessary)
         run: |
           cd decide
+          python -m pip install Pillow
           python manage.py migrate
 
       - name: Run tests
