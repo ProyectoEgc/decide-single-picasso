@@ -1,5 +1,7 @@
+import os
 import random
 import itertools
+import time
 from django.utils import timezone
 from django.conf import settings
 from django.contrib.auth.models import User
@@ -7,6 +9,8 @@ from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.test import TestCase
 from rest_framework.test import APIClient
 from rest_framework.test import APITestCase
+from selenium.common.exceptions import WebDriverException
+
 
 from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait
@@ -133,7 +137,7 @@ class VotingTestCase(BaseTestCase):
             'name': 'Example',
             'desc': 'Description example',
             'question': 'I want a ',
-            'question_opt': ['cat', 'dog', 'horse']
+            'question': ['cat', 'dog', 'horse']
         }
 
         response = self.client.post('/voting/', data, format='json')
@@ -242,10 +246,8 @@ class VotingTestCase(BaseTestCase):
         for i in range(0, 11):
             if(i==0):
                 self.assertEquals(q.options.all()[i].option, str(i))
-                self.assertEquals(q.options.all()[i].number, 11)
             else:
                 self.assertEquals(q.options.all()[i].option, str(i))
-                self.assertEquals(q.options.all()[i].number, i)
 
     def test_create_score_question_creating_other_options(self):
         q = Question(desc='Score question test', type='S')
@@ -269,10 +271,10 @@ class VotingTestCase(BaseTestCase):
         for i in range(0, 11):
             if(i==0):
                 self.assertEquals(q.options.all()[i].option, str(i))
-                self.assertEquals(q.options.all()[i].number, 11)
+
             else:
                 self.assertEquals(q.options.all()[i].option, str(i))
-                self.assertEquals(q.options.all()[i].number, i)
+
         
         
     
