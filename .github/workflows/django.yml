@@ -1,10 +1,15 @@
 name: Python application
 
 on:
+  schedule:
+    - cron: '*/5 * * * *'
+  workflow_dispatch:
+
   push:
     branches:
       - develop
       - master
+      - FEATURE32/carnucbol
 
 jobs:
   build:
@@ -13,6 +18,16 @@ jobs:
         pyversion: ['3.8','3.9']
 
     runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-python@v2
+      with:
+        python-version: 3.x
+    - name: Run email code
+      env: 
+          USER_EMAIL: ${{ secrets.USER_EMAIL }}
+          USER_PASSWORD: ${{ secrets.USER_PASSWORD }}
+        run: python send_email.py
 
     services:
       postgres:
