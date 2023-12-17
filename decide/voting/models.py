@@ -11,6 +11,7 @@ class Types(models.TextChoices):
     CLASSIC_QUESTION = 'C', 'Classic question'
     YES_NO_QUESTION = 'B','Yes/No question'
     MULTIPLE_OPTIONS_QUESTION = 'm','Multiple options question'
+    IMAGE_QUESTION = 'I','Image question'
     SCORED_QUESTION = 'S', 'Score question'
 
 class Question(models.Model):
@@ -38,6 +39,7 @@ class QuestionOption(models.Model):
     question = models.ForeignKey(Question, related_name='options', on_delete=models.CASCADE)
     number = models.PositiveIntegerField(blank=True, null=True)
     option = models.TextField()
+    image = models.ImageField(upload_to='images/', blank =True, null = True)
 
     def save(self, *args, **kwargs):
         if self.question.type == 'B':

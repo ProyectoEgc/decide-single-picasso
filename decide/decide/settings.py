@@ -168,6 +168,10 @@ TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+
 
 # number of bits for the key, all auths should use the same number of bits
 KEYBITS = 256

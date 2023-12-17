@@ -157,6 +157,23 @@
                         {% trans "Vote" %}
                     </button>
                 </div>
+                <div v-if="voting.question.type === 'I'">
+                    <form @submit.prevent="decideSend">
+                      <div v-for="opt in voting.question.options" :key="opt.number" class="form-group">
+                        <div class="textoption">
+                          <input type="radio" v-model="selected" :id="'q' + opt.number" name="question" :value="opt.number">
+                          <label :for="'q' + opt.number">
+                        <img :src="opt.image" width="200" height="180">
+                            [[ opt.option ]]
+                            
+
+                          </label>
+                        </div>
+                      </div>
+                      <button class="btn btn-success mt-3" type="submit">{% trans "Vote" %}</button>
+                    </form>
+                  </div>
+                
             </div>
         </div>
     </div>
