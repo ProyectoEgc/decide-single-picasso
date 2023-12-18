@@ -319,6 +319,92 @@ class VotingTestCase(BaseTestCase):
         self.assertEquals(q.options.all()[0].number, 1)
         self.assertEquals(q.options.all()[1].number, 2)
 
+    # Updating options yes no
+    def test_update_yes_no_question_without_additional_options(self):
+        # Crear una pregunta de sí/no inicialmente
+        q = Question(desc='Yes/No question test', type='B')
+        q.save()
+
+        # Verificar que la pregunta se creó correctamente como sí/no
+        self.assertEqual(q.options.all().count(), 2)
+        self.assertEqual(q.type, 'B')
+        self.assertEqual(q.options.all()[0].option, 'Sí')
+        self.assertEqual(q.options.all()[1].option, 'No')
+        self.assertEqual(q.options.all()[0].number, 1)
+        self.assertEqual(q.options.all()[1].number, 2)
+
+        # Actualizar la pregunta sin agregar opciones adicionales
+        q.desc = 'Updated Yes/No question test'
+        q.save()
+
+        # Verificar que la pregunta se actualizó correctamente y aún tiene solo dos opciones (Sí/No)
+        self.assertEqual(q.options.all().count(), 2)
+        self.assertEqual(q.type, 'B')
+        self.assertEqual(q.options.all()[0].option, 'Sí')
+        self.assertEqual(q.options.all()[1].option, 'No')
+        self.assertEqual(q.options.all()[0].number, 1)
+        self.assertEqual(q.options.all()[1].number, 2)
+    
+    # Updating options yes no with additional options
+    def test_update_yes_no_question_with_additional_options(self):
+        # Crear una pregunta de sí/no inicialmente
+        q = Question(desc='Yes/No question test', type='B')
+        q.save()
+        qo1 = QuestionOption(question = q, option = 'First option')
+        qo1.save()
+        qo2 = QuestionOption(question = q, option = 'Second option')
+        qo2.save()
+        qo3 = QuestionOption(question = q, option = 'Third option')
+        qo3.save()
+
+        # Verificar que la pregunta se creó correctamente como sí/no
+        self.assertEqual(q.options.all().count(), 2)
+        self.assertEqual(q.type, 'B')
+        self.assertEqual(q.options.all()[0].option, 'Sí')
+        self.assertEqual(q.options.all()[1].option, 'No')
+        self.assertEqual(q.options.all()[0].number, 1)
+        self.assertEqual(q.options.all()[1].number, 2)
+
+        # Actualizar la pregunta sin agregar opciones adicionales
+        q.desc = 'Updated Yes/No question test'
+        q.save()
+        qo1 = QuestionOption(question = q, option = 'First option')
+        qo1.save()
+        qo2 = QuestionOption(question = q, option = 'Second option')
+        qo2.save()
+        qo3 = QuestionOption(question = q, option = 'Third option')
+        qo3.save()
+
+        # Verificar que la pregunta se actualizó correctamente y aún tiene solo dos opciones (Sí/No)
+        self.assertEqual(q.options.all().count(), 2)
+        self.assertEqual(q.type, 'B')
+        self.assertEqual(q.options.all()[0].option, 'Sí')
+        self.assertEqual(q.options.all()[1].option, 'No')
+        self.assertEqual(q.options.all()[0].number, 1)
+        self.assertEqual(q.options.all()[1].number, 2)
+
+    def test_delete_yes_no_question_and_options(self):
+        # Crear una pregunta de sí/no
+        q = Question(desc='Yes/No question test', type='B')
+        q.save()
+
+        # Agregar opciones adicionales a la pregunta de sí/no
+        qo1 = QuestionOption(question=q, option='First option')
+        qo1.save()
+        qo2 = QuestionOption(question=q, option='Second option')
+        qo2.save()
+
+        # Verificar que la pregunta tiene las opciones originales
+        self.assertEqual(q.options.all().count(), 2) 
+
+        # Eliminar la pregunta de sí/no
+        q.delete()
+
+        # Verificar que la pregunta y sus opciones asociadas fueron eliminadas correctamente
+        self.assertFalse(Question.objects.filter(desc='Yes/No question test').exists())  # Verificar que la pregunta fue eliminada
+        self.assertFalse(QuestionOption.objects.filter(question=q).exists())  # Verificar que las opciones fueron eliminadas
+
+
     # Testing multiple option question feature
     def test_create_multiple_options_question_without_numbers(self):
         q = Question(desc='Multiple option question test', type='m')
