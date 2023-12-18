@@ -14,12 +14,19 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import WebDriverException
 
+from django.contrib.auth.models import User
+
 class TestImageVoting(StaticLiveServerTestCase):
   def setUp(self):
     # Configuración específica para Selenium y WebDriver
     options = webdriver.ChromeOptions()
     options.headless = False 
     self.driver = webdriver.Chrome(options=options)
+
+    self.user = User.objects.create_user(username='miusuario', password='micontraseña')
+    self.user.is_staff = True
+    self.user.is_superuser = True
+    self.user.save()
 
     super().setUp()
 
@@ -36,11 +43,11 @@ class TestImageVoting(StaticLiveServerTestCase):
     self.base.tearDown()
 
   def testimageQuestionSuccess(self):
-    self.driver.get("http://localhost:8080/admin/login/?next=/admin/")
+    self.driver.get(f'{self.live_server_url}/admin/')
     self.driver.set_window_size(1210, 773)
     self.driver.find_element(By.ID, "id_username").click()
-    self.driver.find_element(By.ID, "id_username").send_keys("admin")
-    self.driver.find_element(By.ID, "id_password").send_keys("admin")
+    self.driver.find_element(By.ID, "id_username").send_keys("miusuario")
+    self.driver.find_element(By.ID, "id_password").send_keys("micontraseña")
     self.driver.find_element(By.ID, "id_password").send_keys(Keys.ENTER)
     self.driver.find_element(By.LINK_TEXT, "Questions").click()
     self.driver.find_element(By.CSS_SELECTOR, "li > .addlink").click()
@@ -86,12 +93,11 @@ class TestImageVoting(StaticLiveServerTestCase):
   def testIMageVoting(self):
 
     # Iniciar sesion como admin
-    self.driver.get("http://localhost:8080/admin/login/?next=/admin/")
+    self.driver.get(f'{self.live_server_url}/admin/')
     self.driver.set_window_size(1210, 773)
-    self.driver.find_element(By.ID, "id_username").click()
-    self.driver.find_element(By.ID, "id_username").send_keys("admin")
-    self.driver.find_element(By.ID, "id_password").click()
-    self.driver.find_element(By.ID, "id_password").send_keys("admin")
+
+    self.driver.find_element(By.ID, "id_username").send_keys("miusuario")
+    self.driver.find_element(By.ID, "id_password").send_keys("micontraseña")
     self.driver.find_element(By.CSS_SELECTOR, ".submit-row > input").click()
 
     # Crear usuario, no necesario
@@ -122,7 +128,7 @@ class TestImageVoting(StaticLiveServerTestCase):
     self.driver.find_element(By.ID, "id_name").click()
     self.driver.find_element(By.ID, "id_name").send_keys("test_auth")
     self.driver.find_element(By.ID, "id_url").click()
-    self.driver.find_element(By.ID, "id_url").send_keys("http://localhost:8080")
+    self.driver.find_element(By.ID, "id_url").send_keys(f'{self.live_server_url}')
     self.driver.find_element(By.ID, "id_me").click()
     self.driver.find_element(By.NAME, "_save").click()
 
@@ -140,10 +146,8 @@ class TestImageVoting(StaticLiveServerTestCase):
     self.driver.find_element(By.CSS_SELECTOR, "li > .addlink").click()
     
     
-    nombre_question = "Pregunta imagenes" + str(numero)
-
     self.driver.find_element(By.ID, "id_desc").click()
-    self.driver.find_element(By.ID, "id_desc").send_keys(nombre_question)
+    self.driver.find_element(By.ID, "id_desc").send_keys("Pregunta imagenes")
     dropdown = self.driver.find_element(By.ID, "id_type")
     dropdown.find_element(By.XPATH, "//option[. = 'Image question']").click()
         
@@ -201,7 +205,7 @@ class TestImageVoting(StaticLiveServerTestCase):
     self.driver.find_element(By.ID, "id_desc").click()
     self.driver.find_element(By.ID, "id_desc").send_keys("Votacion Imagenes")
     dropdown = self.driver.find_element(By.ID, "id_auths")
-    dropdown.find_element(By.XPATH, "//option[. = 'http://localhost:8080']").click()
+    dropdown.find_element(By.XPATH, f"//option[. = '{self.live_server_url}']").click()
     self.driver.find_element(By.ID, "id_question").click()
     dropdown = self.driver.find_element(By.ID, "id_question")
     
@@ -218,9 +222,7 @@ class TestImageVoting(StaticLiveServerTestCase):
     self.driver.find_element(By.NAME, "index").click()
     
     # Añadir censo a la votacion
-    
-    #EL censo siempre será +1 por el admin
-    
+        
     self.driver.find_element(By.LINK_TEXT, "Censuss").click()
     self.driver.find_element(By.CSS_SELECTOR, "li > .addlink").click()
     self.driver.find_element(By.ID, "id_voting_id").click()
@@ -233,7 +235,8 @@ class TestImageVoting(StaticLiveServerTestCase):
     # El usuario censado accede a la votacion
     
     # Puedes cambiar este valor según tus necesidades
-    url = f"http://localhost:8080/booth/{numero_v}/"
+    url = f'{self.live_server_url}/booth/{numero_v}/'
+    
     self.driver.get(url)
     time.sleep(2)
     self.driver.find_element(By.CSS_SELECTOR, ".nav-item > .btn").click()
@@ -244,8 +247,6 @@ class TestImageVoting(StaticLiveServerTestCase):
     self.driver.find_element(By.CSS_SELECTOR, ".btn-primary").click()
     time.sleep(2)
     self.driver.find_element(By.ID, "q1").click()
-
-    time.sleep(2)
 
 
     
