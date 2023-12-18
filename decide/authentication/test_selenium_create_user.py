@@ -18,18 +18,14 @@ class AdminTestCase(StaticLiveServerTestCase):
     self.base = BaseTestCase()
     self.base.setUp()
     options = webdriver.ChromeOptions()
-    options.add_argument('--headless')
-    options.add_argument('--disable-gpu')
-    options.add_argument('--no-sandbox')
-    options.add_argument('--disable-dev-shm-usage')
-    options.binary_location = '/usr/bin/google-chrome'
-    self.driver = webdriver.Chrome(executable_path='/usr/bin/chromedriver', options=options)
+    options.headless = False
+    self.driver = webdriver.Chrome(options=options)
 
     self.user = User.objects.create_user(username='miusuario', password='micontraseña')
     self.user.is_staff = True
     self.user.is_superuser = True
     self.user.save()
-    super().setUp()        
+    super().setUp()            
           
   def tearDown(self):           
     super().tearDown()
