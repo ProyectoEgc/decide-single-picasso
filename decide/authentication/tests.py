@@ -14,7 +14,6 @@ from django.utils.translation import *
 from django.views.i18n import set_language
 
 
-
 class AuthTestCase(APITestCase):
 
     def setUp(self):
@@ -167,8 +166,47 @@ class LanguageSwitchViewTest(TestCase):
 
         self.assertEqual(response.context['LANGUAGE_CODE'], 'fr')
 
+class SignUpTestCase(TestCase):
+    def setUp(self):
+        self.signup_url = reverse('signup')
 
-    
+    def test_signup_view_get(self):
+        response = self.client.get(self.signup_url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'signup.html')
 
+    def test_signup_view_post_success(self):
+        data = {
+            'username': 'testuser',
+            'password1': 'testpassword',
+            'password2': 'testpassword',
+            'first_name': 'Test',
+            'last_name': 'Test',
+            'email': 'test@gmail.com',
+        }
+
+        response = self.client.post(self.signup_url, data)
+        self.assertEqual(response.status_code, 302)  # 302 indicates a successful redirect
+        self.assertRedirects(response, reverse('login'))
+
+        # Check if the user is created in the database
+        self.assertTrue(User.objects.filter(username='testuser').exists())
+
+    def test_signup_view_post_password_mismatch(self):
+        data = {
+            'username': 'testuser',
+            'password1': 'testpassword1',
+            'password2': 'testpassword2',
+            'first_name': 'Test',
+            'last_name': 'Test',
+            'email': 'test@gmail.com',
+        }
+
+        response = self.client.post(self.signup_url, data)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'signup.html')
+
+        # Check if the error message is present in the response
+        self.assertContains(response, 'Passwords do not match')
 
 
