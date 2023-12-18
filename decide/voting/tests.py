@@ -238,7 +238,7 @@ class VotingTestCase(BaseTestCase):
         voting = Voting.objects.get(name='Example')
         self.assertEqual(voting.desc, 'Description example')
 
-
+    
     
     def test_create_score_question(self):
         q = Question(desc='Score question test', type='S')
@@ -409,10 +409,7 @@ class QuestionsTests(StaticLiveServerTestCase):
         #Load base test functionality for decide
         self.base = BaseTestCase()
         self.base.setUp()
-
-        options = webdriver.ChromeOptions()
-        options.headless = True
-        self.driver = webdriver.Chrome(options=options)
+        self.cleaner = Cleaner() 
 
         super().setUp()
 
@@ -421,7 +418,7 @@ class QuestionsTests(StaticLiveServerTestCase):
         self.driver.quit()
 
         self.base.tearDown()
-
+    
     def createQuestionSuccess(self):
         self.cleaner.get(self.live_server_url+"/admin/login/?next=/admin/")
         self.cleaner.set_window_size(1280, 720)
