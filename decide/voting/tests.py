@@ -1,5 +1,7 @@
+import os
 import random
 import itertools
+import time
 from django.utils import timezone
 from django.conf import settings
 from django.contrib.auth.models import User
@@ -7,7 +9,9 @@ from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.test import TestCase
 from rest_framework.test import APIClient
 from rest_framework.test import APITestCase
+from selenium.common.exceptions import WebDriverException
 from django.core.exceptions import ValidationError
+
 
 from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait
@@ -277,8 +281,7 @@ class VotingTestCase(BaseTestCase):
 
             else:
                 self.assertEquals(q.options.all()[i].option, str(i))
-        
-    
+
     def test_update_voting_405(self):
         v = self.create_voting()
         data = {} #El campo action es requerido en la request
@@ -545,10 +548,7 @@ class QuestionsTests(StaticLiveServerTestCase):
         #Load base test functionality for decide
         self.base = BaseTestCase()
         self.base.setUp()
-
-        options = webdriver.ChromeOptions()
-        options.headless = True
-        self.driver = webdriver.Chrome(options=options)
+        self.cleaner = Cleaner() 
 
         super().setUp()
 
@@ -557,7 +557,7 @@ class QuestionsTests(StaticLiveServerTestCase):
         self.driver.quit()
 
         self.base.tearDown()
-
+    
     def createQuestionSuccess(self):
         self.cleaner.get(self.live_server_url+"/admin/login/?next=/admin/")
         self.cleaner.set_window_size(1280, 720)
