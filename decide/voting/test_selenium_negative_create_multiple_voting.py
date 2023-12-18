@@ -110,7 +110,7 @@ class TestNegativeCreateMultipleVoting(StaticLiveServerTestCase):
 
         # El usuario censado accede a la votación
 
-        self.driver.get(f"{self.live_server_url}/booth/1/")
+        self.driver.get(f"{self.live_server_url}/booth/8/")
         time.sleep(1)
         wait = WebDriverWait(self.driver, 10)
         time.sleep(1)

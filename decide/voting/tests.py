@@ -245,7 +245,7 @@ class VotingTestCase(BaseTestCase):
                 self.assertEquals(q.options.all()[i].option, str(i))
             else:
                 self.assertEquals(q.options.all()[i].option, str(i))
-    
+
     def test_empty_description(self):
         with self.assertRaises(ValidationError):
             question = Question(desc='')  
