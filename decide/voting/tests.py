@@ -7,6 +7,7 @@ from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.test import TestCase
 from rest_framework.test import APIClient
 from rest_framework.test import APITestCase
+from django.core.exceptions import ValidationError
 
 from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait
@@ -244,6 +245,12 @@ class VotingTestCase(BaseTestCase):
                 self.assertEquals(q.options.all()[i].option, str(i))
             else:
                 self.assertEquals(q.options.all()[i].option, str(i))
+    
+    def test_empty_description(self):
+        with self.assertRaises(ValidationError):
+            question = Question(desc='')  
+            question.full_clean()  
+
 
     def test_create_score_question_creating_other_options(self):
         q = Question(desc='Score question test', type='S')
