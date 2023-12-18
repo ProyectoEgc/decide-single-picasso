@@ -1,0 +1,82 @@
+{
+    "user0": {
+        "username": "username0",
+        "first_name": "John",
+        "last_name": "Doe",
+        "email": "john.doe@example.com",
+        "password1": "password",
+        "password2": "password"
+    },
+    "user1": {
+        "username": "username1",
+        "first_name": "Alice",
+        "last_name": "Smith",
+        "email": "alice.smith@example.com",
+        "password1": "password",
+        "password2": "password"
+    },
+    "user2": {
+        "username": "username2",
+        "first_name": "Michael",
+        "last_name": "Johnson",
+        "email": "michael.johnson@example.com",
+        "password1": "password",
+        "password2": "password"
+    },
+    "user3": {
+        "username": "username3",
+        "first_name": "Emily",
+        "last_name": "Williams",
+        "email": "emily.williams@example.com",
+        "password1": "password",
+        "password2": "password"
+    },
+    "user4": {
+        "username": "username4",
+        "first_name": "David",
+        "last_name": "Brown",
+        "email": "david.brown@example.com",
+        "password1": "password",
+        "password2": "password"
+    },
+    "user5": {
+        "username": "username5",
+        "first_name": "Sophia",
+        "last_name": "Jones",
+        "email": "sophia.jones@example.com",
+        "password1": "password",
+        "password2": "password"
+    },
+    "user6": {
+        "username": "username6",
+        "first_name": "Oliver",
+        "last_name": "Garcia",
+        "email": "oliver.garcia@example.com",
+        "password1": "password",
+        "password2": "password"
+    },
+    "user7": {
+        "username": "username7",
+        "first_name": "Emma",
+        "last_name": "Martinez",
+        "email": "emma.martinez@example.com",
+        "password1": "password",
+        "password2": "password"
+    },
+    "user8": {
+        "username": "username8",
+        "first_name": "Daniel",
+        "last_name": "Lee",
+        "email": "daniel.lee@example.com",
+        "password1": "password",
+        "password2": "password"
+    },
+    "user9": {
+        "username": "username9",
+        "first_name": "Isabella",
+        "last_name": "Taylor",
+        "email": "isabella.taylor@example.com",
+        "password1": "password",
+        "password2": "password"
+    }
+}
