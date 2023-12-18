@@ -3,7 +3,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.common.exceptions import WebDriverException
-
+from django.contrib.auth.models import User
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from base.tests import BaseTestCase
 
@@ -16,6 +16,10 @@ class TestSelenium(StaticLiveServerTestCase):
     options = webdriver.ChromeOptions()
     options.headless = False 
     self.driver = webdriver.Chrome(options=options)
+    self.user = User.objects.create_user(username='miusuario', password='micontraseña')
+    self.user.is_staff = True
+    self.user.is_superuser = True
+    self.user.save()
 
     super().setUp()
 
@@ -32,15 +36,13 @@ class TestSelenium(StaticLiveServerTestCase):
     self.base.tearDown()
   
   def test_WrongImport(self):
-    self.driver.get("http://localhost:8000/admin/census/census")
-    self.driver.set_window_size(1210, 773)
-    self.driver.find_element(By.ID, "id_username").click()
-    self.driver.find_element(By.ID, "id_username").send_keys("admin")
-    self.driver.find_element(By.ID, "id_password").send_keys("admin")
+    self.driver.get(f'{self.live_server_url}/admin/census/census')
+    self.driver.find_element(By.ID, "id_username").send_keys("miusuario")
+    self.driver.find_element(By.ID, "id_password").send_keys("micontraseña")
     self.driver.find_element(By.ID, "id_password").send_keys(Keys.ENTER)
+
     self.driver.find_element(By.LINK_TEXT, "Censuss").click()
     self.driver.find_element(By.CSS_SELECTOR, ".import_link").click()
-
     DIR = os.path.dirname(os.path.realpath(__file__))
     archivo_relativo = 'static/WrongType.ods'
     archivo_absoluto = os.path.join(DIR, archivo_relativo)
@@ -58,15 +60,13 @@ class TestSelenium(StaticLiveServerTestCase):
     time.sleep(3)
 
   def test_EmptyImport(self):
-    self.driver.get("http://localhost:8000/admin/census/census")
-    self.driver.set_window_size(1210, 773)
-    self.driver.find_element(By.ID, "id_username").click()
-    self.driver.find_element(By.ID, "id_username").send_keys("admin")
-    self.driver.find_element(By.ID, "id_password").send_keys("admin")
+    self.driver.get(f'{self.live_server_url}/admin/census/census')
+    self.driver.find_element(By.ID, "id_username").send_keys("miusuario")
+    self.driver.find_element(By.ID, "id_password").send_keys("micontraseña")
     self.driver.find_element(By.ID, "id_password").send_keys(Keys.ENTER)
+
     self.driver.find_element(By.LINK_TEXT, "Censuss").click()
     self.driver.find_element(By.CSS_SELECTOR, ".import_link").click()
-
     DIR = os.path.dirname(os.path.realpath(__file__))
     archivo_relativo = 'static/EmptyFile.xls'
     archivo_absoluto = os.path.join(DIR, archivo_relativo)
@@ -84,11 +84,9 @@ class TestSelenium(StaticLiveServerTestCase):
     time.sleep(3)
 
   def test_CorrectImport(self):
-    self.driver.get("http://localhost:8000/admin/census/census")
-    self.driver.set_window_size(1210, 773)
-    self.driver.find_element(By.ID, "id_username").click()
-    self.driver.find_element(By.ID, "id_username").send_keys("admin")
-    self.driver.find_element(By.ID, "id_password").send_keys("admin")
+    self.driver.get(f'{self.live_server_url}/admin/census/census')
+    self.driver.find_element(By.ID, "id_username").send_keys("miusuario")
+    self.driver.find_element(By.ID, "id_password").send_keys("micontraseña")
     self.driver.find_element(By.ID, "id_password").send_keys(Keys.ENTER)
     self.driver.find_element(By.LINK_TEXT, "Censuss").click()
     self.driver.find_element(By.CSS_SELECTOR, ".import_link").click()
