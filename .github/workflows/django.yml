@@ -51,10 +51,6 @@ jobs:
           sudo apt-get install gettext
           cd decide
           ./manage.py compilemessages
-      - name: selenium prerequisites
-        run: |
-          pip install selenium
-          sudo apt install chromium-browser chromium-chromedriver
       - name: Run migrations (unnecessary)
         run: |
           cd decide
@@ -62,7 +58,7 @@ jobs:
       - name: Run tests
         run: |
           cd decide
-          coverage run ./manage.py test
+          coverage run --branch --source=. ./manage.py test  --keepdb
           coverage xml 
       - name: Codacy Coverage Reporter
         uses: codacy/codacy-coverage-reporter-action@v1
