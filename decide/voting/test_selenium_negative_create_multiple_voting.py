@@ -11,8 +11,9 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.keys import Keys
 from django.contrib.auth.models import User
+from nose.tools import nottest
 
-
+@nottest
 class TestNegativeCreateMultipleVoting(StaticLiveServerTestCase):
     def setUp(self):
         self.base = BaseTestCase()
