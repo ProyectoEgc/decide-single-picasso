@@ -18,7 +18,7 @@ class AdminTestCase(StaticLiveServerTestCase):
     self.base = BaseTestCase()
     self.base.setUp()
     options = webdriver.ChromeOptions()
-    options.headless = False
+    options.headless = True
     self.driver = webdriver.Chrome(options=options)
 
     self.user = User.objects.create_user(username='miusuario', password='micontraseña')
