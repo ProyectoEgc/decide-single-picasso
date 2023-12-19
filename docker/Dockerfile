@@ -10,6 +10,7 @@ RUN pip install ipython
 
 WORKDIR /app
 
+ARG BRANCH=master
 RUN git clone https://github.com/ProyectoEgc/decide-single-picasso.git .
 RUN pip install -r requirements.txt
 
@@ -19,5 +20,6 @@ WORKDIR /app/decide
 ADD docker-settings.py /app/decide/local_settings.py
 
 RUN ./manage.py collectstatic
+
 
 #CMD ["gunicorn", "-w 5", "decide.wsgi", "--timeout=500", "-b 0.0.0.0:5000"]
