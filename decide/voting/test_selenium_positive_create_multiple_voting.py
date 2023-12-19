@@ -13,7 +13,7 @@ class TestMultipleOptionVoting(StaticLiveServerTestCase):
     def setUp(self):
         # Configuración específica para Selenium y WebDriver
         options = webdriver.ChromeOptions()
-        options.headless = False 
+        options.headless = True 
         self.driver = webdriver.Chrome(options=options)
 
         super().setUp()
@@ -54,8 +54,9 @@ class TestMultipleOptionVoting(StaticLiveServerTestCase):
         self.driver.find_element(By.NAME, "_save").click()
 
         success_message = self.driver.find_element(By.CSS_SELECTOR, ".success").text
-        expected_message = f'El auth “{self.live_server_url}” fue agregado correctamente.'
+        expected_message = f'The auth “{self.live_server_url}” was added successfully.'
         assert expected_message in success_message, f"Auth creation failed. Expected: {expected_message}, Actual: {success_message}"
+
 
     def create_question_for_multiple_voting(self):
         self.driver.find_element(By.LINK_TEXT, "Questions").click()
@@ -75,7 +76,7 @@ class TestMultipleOptionVoting(StaticLiveServerTestCase):
 
         # Aserción para verificar que la pregunta se creó correctamente
         success_message = self.driver.find_element(By.CSS_SELECTOR, ".success").text
-        expected_message = 'El question “pregunta de opcion multiple” fue agregado correctamente.'
+        expected_message = 'The question “pregunta de opcion multiple” was added successfully.'
         assert expected_message in success_message, f"Question creation failed. Expected: {expected_message}, Actual: {success_message}"
 
         
@@ -96,7 +97,7 @@ class TestMultipleOptionVoting(StaticLiveServerTestCase):
         
         # Aserción para verificar que la votación se creó correctamente
         success_message = self.driver.find_element(By.CSS_SELECTOR, ".success").text
-        expected_message = 'El voting “votacion multiple” fue agregado correctamente.'
+        expected_message = 'The voting “votacion multiple” was added successfully.'
         assert expected_message in success_message, f"Voting creation failed. Expected: {expected_message}, Actual: {success_message}"
 
 
