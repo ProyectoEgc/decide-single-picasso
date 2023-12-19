@@ -8,7 +8,7 @@ from selenium.webdriver.support import expected_conditions as EC
 class TestRegister(StaticLiveServerTestCase):
   def setUp(self):
     options = webdriver.ChromeOptions()
-    options.headless = True 
+    options.headless = False 
     self.driver = webdriver.Chrome(options=options)
 
     super().setUp()
@@ -33,7 +33,11 @@ class TestRegister(StaticLiveServerTestCase):
     self.driver.find_element(By.ID, "password2").send_keys("test")
     self.driver.find_element(By.CSS_SELECTOR, ".btn").click()
     
-    self.driver.get(f"{self.live_server_url}/authentication/login-view/")
+    # Verificar que la URL se redirige correctamente después del registro
+    expected_login_url = f"{self.live_server_url}/authentication/login-view/"
+    current_url = self.driver.current_url
+    self.assertEqual(current_url, expected_login_url, f"La URL actual {current_url} no coincide con la esperada {expected_login_url}")
+
 
   def test_negative_register(self):
     self.driver.get(f"{self.live_server_url}/signup/")
