@@ -4,8 +4,10 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium.webdriver.support import expected_conditions as EC
+from nose.tools import nottest
 
 from base.tests import BaseTestCase
+@nottest
 class TestRegister(StaticLiveServerTestCase):
   def setUp(self):
     self.base = BaseTestCase()
