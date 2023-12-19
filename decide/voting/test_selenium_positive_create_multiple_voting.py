@@ -6,11 +6,9 @@ from selenium.webdriver.support import expected_conditions as EC
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 import time
 
-from nose.tools import nottest
 from base.tests import BaseTestCase
 from selenium.webdriver.common.keys import Keys
 
-@nottest
 class TestMultipleOptionVoting(StaticLiveServerTestCase):
     def setUp(self):
         # Configuración específica para Selenium y WebDriver

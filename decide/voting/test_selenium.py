@@ -15,10 +15,8 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import WebDriverException
 
-from nose.tools import nottest
 from django.contrib.auth.models import User
 
-@nottest
 class TestImageVoting(StaticLiveServerTestCase):
   def setUp(self):
     # Configuración específica para Selenium y WebDriver
