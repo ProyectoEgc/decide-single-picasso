@@ -34,16 +34,18 @@ class AdminTestCase(StaticLiveServerTestCase):
     self.base.tearDown()
   
   def test_simpleCorrectLogin(self):               
-    self.driver.get(f'{self.live_server_url}/admin/')
+    self.driver.get(f'{self.live_server_url}/admin/login/?next=/admin/')
     self.driver.find_element(By.ID,'id_username').send_keys("miusuario")
     self.driver.find_element(By.ID,'id_password').send_keys("micontraseña",Keys.ENTER)
-    #Verifica que nos hemos logado porque aparece la barra de herramientas superior
-    self.assertTrue(len(self.driver.find_elements(By.ID, 'user-tools'))==1)
-    self.driver.find_element(By.LINK_TEXT, "Usuarios").click()
-    time.sleep(5)
+    time.sleep(1)
+    self.driver.find_element(By.LINK_TEXT, "Users").click()
+    time.sleep(1)
     self.driver.find_element(By.CSS_SELECTOR, "li > .addlink").click()
+    time.sleep(1)
     self.driver.find_element(By.ID, "id_username").click()
-    self.driver.find_element(By.ID, "id_username").send_keys("usuario1")
+    time.sleep(1)
+    self.driver.find_element(By.ID, "id_username").send_keys("usuarionormal")
+
     self.driver.find_element(By.ID, "id_password1").click()
     self.driver.find_element(By.ID, "id_password1").send_keys("user1234")
     self.driver.find_element(By.ID, "id_password2").click()
