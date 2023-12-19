@@ -300,6 +300,27 @@ class VotingTestCase(BaseTestCase):
         self.assertEquals(str(v.question.options.all()[0]),"option 1 (2)")
 
     # Testing yes/no question feature
+    def test_create_image_question(self):
+        q = Question(desc='Image', type='I')
+        q.save()
+
+        q01 = QuestionOption(question = q, option = "First option", image = 'Image.jpeg')
+        q01.save()
+        q02 = QuestionOption(question = q, option = "Second option", image = 'Image.jpeg')
+        q02.save()
+        q03 = QuestionOption(question = q, option = "Third option", image = 'Image.jpeg')
+        q03.save()
+
+        self.assertEquals(q.options.all().count(), 3)
+        self.assertEquals(q.type, 'I')
+        self.assertEquals(q.options.all()[0].option, 'First option')
+        self.assertEquals(q.options.all()[1].option, 'Second option')
+        self.assertEquals(q.options.all()[2].option, 'Third option')
+        self.assertEquals(q.options.all()[0].number, 2)
+        self.assertEquals(q.options.all()[1].number, 3)
+        self.assertEquals(q.options.all()[2].number, 4)
+
+    # Testing yes/no question feature
     def test_create_yes_no_question(self):
         q = Question(desc='Yes/No question test', type='B')
         q.save()

@@ -13,7 +13,7 @@ class TestMultipleOptionVoting(StaticLiveServerTestCase):
     def setUp(self):
         # Configuración específica para Selenium y WebDriver
         options = webdriver.ChromeOptions()
-        options.headless = False 
+        options.headless = True 
         self.driver = webdriver.Chrome(options=options)
 
         super().setUp()

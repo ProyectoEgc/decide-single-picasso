@@ -34,12 +34,12 @@ class TestNegativeCreateMultipleVoting(StaticLiveServerTestCase):
         self.base.tearDown()
 
     def test_multiple_option_voting(self):
-        self.driver.get(f'{self.live_server_url}/admin/')
+        self.driver.get(f'{self.live_server_url}/admin/login/?next=/admin/')
         self.driver.find_element(By.ID,'id_username').send_keys("miusuario")
         self.driver.find_element(By.ID,'id_password').send_keys("micontraseña",Keys.ENTER)
 
         #Crea un usuario
-        self.driver.find_element(By.LINK_TEXT, "Usuarios").click()
+        self.driver.find_element(By.LINK_TEXT, "Users").click()
         self.driver.find_element(By.CSS_SELECTOR, "li > .addlink").click()
         self.driver.find_element(By.ID, "id_username").click()
         self.driver.find_element(By.ID, "id_username").send_keys("usuario1")
@@ -88,16 +88,15 @@ class TestNegativeCreateMultipleVoting(StaticLiveServerTestCase):
         dropdown.find_element(By.XPATH, "//option[. = 'pregunta de opcion multiple']").click()
         self.driver.find_element(By.CSS_SELECTOR, "#id_question > option:nth-child(2)").click()
         self.driver.find_element(By.NAME, "_save").click()
-
         # Añadir censo a la votación utilizando un usuario creado en BaseTestCase
         self.driver.find_element(By.LINK_TEXT, "Censuss").click()
         self.driver.find_element(By.CSS_SELECTOR, "li > .addlink").click()
         self.driver.find_element(By.ID, "id_voting_id").click()
-        self.driver.find_element(By.ID, "id_voting_id").send_keys("9")
+        self.driver.find_element(By.ID, "id_voting_id").send_keys("8")
         self.driver.find_element(By.ID, "id_voter_id").click()
-        self.driver.find_element(By.ID, "id_voter_id").send_keys("4")  # ID del usuario creado
+        self.driver.find_element(By.ID, "id_voter_id").send_keys("226")  # ID del usuario creado
         self.driver.find_element(By.NAME, "_save").click()
-
+        time.sleep(25)
         # Iniciar votación
         self.driver.find_element(By.LINK_TEXT, "Votings").click()
         self.driver.find_element(By.NAME, "_selected_action").click()
@@ -106,10 +105,9 @@ class TestNegativeCreateMultipleVoting(StaticLiveServerTestCase):
         dropdown.find_element(By.XPATH, "//option[. = 'Start']").click()
         self.driver.find_element(By.CSS_SELECTOR, "option:nth-child(3)").click()
         self.driver.find_element(By.NAME, "index").click()
-
         # El usuario censado accede a la votación
-
-        self.driver.get(f"{self.live_server_url}/booth/9/")
+        
+        self.driver.get(f"{self.live_server_url}/booth/8/")
         time.sleep(1)
         wait = WebDriverWait(self.driver, 10)
         time.sleep(1)
