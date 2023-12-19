@@ -1,16 +1,4 @@
 .voting {
     margin-top: 20px;
-}
-
-#app-booth{
-    height: 100vh;
-    background-color: aliceblue;
-}
-
-.textoption{
-    font-size: 20px;
-}
-
-.mensaje{
     margin-left: 40px;
 }

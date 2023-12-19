@@ -1,9 +1,6 @@
 name: Python application
 
 on:
-  schedule:
-    - cron: '*/5 * * * *'
-  workflow_dispatch:
   push:
     branches:
       - develop
@@ -13,7 +10,7 @@ jobs:
   build:
     strategy:
       matrix:
-        pyversion: ['3.8', '3.9']
+        pyversion: ['3.8','3.9']
 
     runs-on: ubuntu-latest
 
@@ -29,47 +26,32 @@ jobs:
         # needed because the postgres container does not provide a healthcheck
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
 
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Set up Python ${{matrix.pyversion}}
-        uses: actions/setup-python@v4
-        with:
-          python-version: ${{matrix.pyversion}}
-
-      - name: Run email code
-        env:
-          USER_EMAIL: ${{ secrets.USER_EMAIL }}
-          USER_PASSWORD: ${{ secrets.USER_PASSWORD }}
-        run: |
-          cd decide
-          python send_email.py
-
-      - name: psycopg2 prerequisites
-        run: sudo apt-get install libpq-dev
-
-      - name: Install dependencies and config
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-          pip install codacy-coverage
-          cp decide/local_settings.gactions.py decide/local_settings.py
-
-      - name: Run migrations (unnecessary)
-        run: |
-          cd decide
-          python manage.py migrate
-          python manage.py migrate --database=test
-      - name: Run tests
-        run: |
-          cd decide
-          coverage run --branch --source=. ./manage.py test --keepdb
-          coverage xml
-
-      - name: Codacy Coverage Reporter
-        uses: codacy/codacy-coverage-reporter-action@v1
-        with:
+    - uses: actions/checkout@v3
+    - name: Set up Python ${{matrix.pyversion}}
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{matrix.pyversion}}
+    - name: psycopg2 prerequisites
+      run: sudo apt-get install libpq-dev
+    - name: Install dependencies and config
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install codacy-coverage
+        cp decide/local_settings.gactions.py decide/local_settings.py
+    - name: Run migrations (unnecessary)
+      run: |
+        cd decide
+        python manage.py migrate
+    - name: Run tests
+      run: |
+        cd decide
+        coverage run --branch --source=. ./manage.py test  --keepdb 
+        coverage xml 
+    - name: Codacy Coverage Reporter
+      uses: codacy/codacy-coverage-reporter-action@v1
+      with:
           project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
           coverage-reports: decide/coverage.xml
+
