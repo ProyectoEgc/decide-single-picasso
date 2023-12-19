@@ -1,4 +1,5 @@
-sudo apt-get install gettext
+#!/bin/sh
+apt-get install gettext
 cd decide/
 cp local_settings.deploy.py local_settings.py
 ./manage.py createsuperuser --noinput
