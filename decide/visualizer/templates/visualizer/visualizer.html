@@ -10,33 +10,27 @@
 {% block content %}
     <div id="app-visualizer">
         <!-- Navbar -->
-        <nav class="navbar navbar-dark bg-secondary">
+        <nav class="navbar navbar-dark bg-dark">
             <div class="container-fluid">
-                <div class="navbar-brand">{% trans "Decide" %}</div>
-                <div class="float-end">
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                        <li class="nav-item" v-if="!signup">
-                            <a href="/"><button class="btn btn-secondary">{% trans "Home" %}</button></a>
-                        </li>
-                    </ul>
-                </div>
+                <h1 class="navbar-brand">Decide</h1>
             </div>
         </nav>
           
 
-        <div class="voting container text-center">
-            <div class="card" style="width: 100%;">
-            <h1 class="card-title">[[ voting.name ]]</h1>
-            <h3 v-if="!voting.start_date" class="card-subtitle mb-2 text-muted">{% trans "Voting not started" %}</h3>
-            <h3 v-else-if="!voting.end_date" class="card-subtitle mb-2 text-muted">{% trans "Voting in progress" %}</h3>
+        <div class="voting container">
+            <h1>[[ voting.id ]] - [[ voting.name ]]</h1>
+
+            <h2 v-if="!voting.start_date">Votación no comenzada</h2>
+            <h2 v-else-if="!voting.end_date">Votación en curso</h2>
             <div v-else>
-                <h4>[[voting.question.desc]]</h4>
-                <table class="table table-bordered table-striped table-hover">
+                <h2 class="heading">Resultados:</h2>
+
+                <table class="table table-bordered table-striped">
                     <thead>
                         <tr>
-                            <th>{% trans "Option" %}</th>
-                            <th>{% trans "Score" %}</th>
-                            <th>{% trans "Votes" %}</th>
+                            <th>Opción</th>
+                            <th>Puntuación</th>
+                            <th>Votos</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -47,14 +41,6 @@
                         </tr>
                     </tbody>
                 </table>
-                {% if promedio >= 0 %}
-                    <h1>{% trans "The average is" %}</h1>
-                    <p> {{ promedio }}</p>
-                {% endif %}
-                <h2 class="heading">{% trans "Charts" %}:</h2>
-                <canvas id="myChart" height="auto" width="auto"></canvas>
-                
-            </div>
             </div>
 
         </div>
@@ -62,12 +48,10 @@
 {% endblock %}
 
 {% block extrabody %}
-    <!-- Vue.js -->
+    <!-- Vuejs -->
     <script src="https://unpkg.com/vue"></script>
     <script src="https://unpkg.com/babel-polyfill@latest/dist/polyfill.min.js"></script>
     <script src="https://unpkg.com/bootstrap@5.2.2/dist/js/bootstrap.js"></script>
-    <!-- Chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <script>
         var voting = {{voting|safe}};
@@ -80,46 +64,6 @@
                 }
             }
         }).mount('#app-visualizer')
-
-    function generateRandomColors(numColors) {
-        var colors = [];
-        for (var i = 0; i < numColors; i++) {
-            var color = "#" + Math.floor(Math.random() * 16777215).toString(16);
-            colors.push(color);
-        }
-        return colors;
-}
-
-    // Generate random colors for each data point in the chart
-    var numDataPoints = voting.postproc.map((opt) => opt.option).length;
-    var randomColors = generateRandomColors(numDataPoints);
-
-    // Configure the chart
-    var config = {
-        type: 'bar', 
-        data: {
-            labels: voting.postproc.map((opt) => opt.option),
-            datasets: [
-            {
-                label: {% trans "'Voting Results'" %},
-                data: voting.postproc.map((opt) => opt.votes),
-                backgroundColor: randomColors,
-                borderWidth: 4
-            }
-        ]
-        },
-        options: {
-                responsive: true,
-                title: {
-                    text: voting.name,
-                    display: true
-                }
-            }
-    };
-
-    var ctx = document.getElementById('myChart').getContext('2d');
-    var myChart = new Chart(ctx, config);
-
     </script>
 </body>
 {% endblock %}

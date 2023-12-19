@@ -4,7 +4,6 @@ from django.utils import timezone
 from django.shortcuts import get_object_or_404
 from rest_framework import generics, status
 from rest_framework.response import Response
-import os
 
 from .models import Question, QuestionOption, Voting
 from .serializers import SimpleVotingSerializer, VotingSerializer
@@ -26,42 +25,29 @@ class VotingView(generics.ListCreateAPIView):
             version = settings.DEFAULT_VERSION
         if version == 'v2':
             self.serializer_class = SimpleVotingSerializer
-    
+
         return super().get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
         self.permission_classes = (UserIsStaff,)
         self.check_permissions(request)
-
-        required_fields = ['name', 'desc', 'question', 'question_opt', 'image']
-        for field in required_fields:
-            if field not in request.data:
-                return Response({"error": f"{field} is required"}, status=status.HTTP_400_BAD_REQUEST)
+        for data in ['name', 'desc', 'question', 'question_opt']:
+            if not data in request.data:
+                return Response({}, status=status.HTTP_400_BAD_REQUEST)
 
         question = Question(desc=request.data.get('question'))
         question.save()
-
         for idx, q_opt in enumerate(request.data.get('question_opt')):
-            opt = QuestionOption(question=question, option=q_opt, number=idx,)
+            opt = QuestionOption(question=question, option=q_opt, number=idx)
             opt.save()
-
-        # Guardar la imagen
-        image_file = request.data['image']
-        image_path = os.path.join(settings.MEDIA_ROOT, 'images', image_file.name)
-
-        with open(image_path, 'wb') as image_destination:
-            for chunk in image_file.chunks():
-                image_destination.write(chunk)
-                
         voting = Voting(name=request.data.get('name'), desc=request.data.get('desc'),
-                        question=question, image=image_file)
+                question=question)
         voting.save()
 
-        auth, _ = Auth.objects.get_or_create(url=settings.BASEURL, defaults={'me': True, 'name': 'test auth'})
+        auth, _ = Auth.objects.get_or_create(url=settings.BASEURL,
+                                          defaults={'me': True, 'name': 'test auth'})
         auth.save()
-
         voting.auths.add(auth)
-
         return Response({}, status=status.HTTP_201_CREATED)
 
 
@@ -115,25 +101,3 @@ class VotingUpdate(generics.RetrieveUpdateDestroyAPIView):
             msg = 'Action not found, try with start, stop or tally'
             st = status.HTTP_400_BAD_REQUEST
         return Response(msg, status=st)
-
-def create_yes_no_question(self):
-    options = QuestionOption.objects.all().filter(question=self)
-    for o in options:
-        o.delete()
-    option_yes = QuestionOption(option='Sí', number=1, question=self)
-    option_yes.save()
-    option_no = QuestionOption(option='No', number=2, question=self)
-    option_no.save()
-
-def create_score_questions(self):
-    options = QuestionOption.objects.all().filter(question=self)
-    for o in options:
-        o.delete()
-    
-    for i in range(0,11):
-        if(i == 0):
-            option_i = QuestionOption(option=str(i), question=self)
-            option_i.save()
-        else:
-            option_i= QuestionOption(option=str(i), question=self)
-            option_i.save()

@@ -232,144 +232,12 @@ class VotingTestCase(BaseTestCase):
         voting = Voting.objects.get(name='Example')
         self.assertEqual(voting.desc, 'Description example')
 
-
-    
-    def test_create_score_question(self):
-        q = Question(desc='Score question test', type='S')
-        q.save()
-        self.assertEquals(len(q.options.all()), 11)
-        self.assertEquals(q.type, 'S')
-        for i in range(0, 11):
-            if(i==0):
-                self.assertEquals(q.options.all()[i].option, str(i))
-                self.assertEquals(q.options.all()[i].number, 11)
-            else:
-                self.assertEquals(q.options.all()[i].option, str(i))
-                self.assertEquals(q.options.all()[i].number, i)
-
-    def test_create_score_question_creating_other_options(self):
-        q = Question(desc='Score question test', type='S')
-        q.save()
-
-        q01=QuestionOption(question= q, option = "Probando")
-        q01.save()
-        q02=QuestionOption(question= q, option = "Seguimos probando")
-        q02.save()
-        q03=QuestionOption(question= q, option = "Creando preguntas")
-        q03.save()
-        q04=QuestionOption(question= q, option = "Para")
-        q04.save()
-        q05=QuestionOption(question= q, option = "Tests")
-        q05.save()
-
-        q.save()
-        self.assertEquals(len(q.options.all()), 11)
-        self.assertEquals(q.type, 'S')
-
-        for i in range(0, 11):
-            if(i==0):
-                self.assertEquals(q.options.all()[i].option, str(i))
-                self.assertEquals(q.options.all()[i].number, 11)
-            else:
-                self.assertEquals(q.options.all()[i].option, str(i))
-                self.assertEquals(q.options.all()[i].number, i)
-        
-        
-    
     def test_update_voting_405(self):
         v = self.create_voting()
         data = {} #El campo action es requerido en la request
         self.login()
         response = self.client.post('/voting/{}/'.format(v.pk), data, format= 'json')
         self.assertEquals(response.status_code, 405)
-    
-    def test_to_string(self):
-        #Crea un objeto votacion
-        v = self.create_voting()
-        #Verifica que el nombre de la votacion es test voting
-        self.assertEquals(str(v),"test voting")
-        #Verifica que la descripcion de la pregunta sea test question
-        self.assertEquals(str(v.question),"test question")
-        #Verifica que la primera opcion es option1 (2)
-        self.assertEquals(str(v.question.options.all()[0]),"option 1 (2)")
-
-    # Testing yes/no question feature
-    def test_create_yes_no_question(self):
-        q = Question(desc='Yes/No question test', type='B')
-        q.save()
-
-        self.assertEquals(q.options.all().count(), 2)
-        self.assertEquals(q.type, 'B')
-        self.assertEquals(q.options.all()[0].option, 'Sí')
-        self.assertEquals(q.options.all()[1].option, 'No')
-        self.assertEquals(q.options.all()[0].number, 1)
-        self.assertEquals(q.options.all()[1].number, 2)
-
-    # Adding options other than yes and no manually
-    def test_create_yes_no_question_with_other_options(self):
-        q = Question(desc='Yes/No question test', type='B')
-        q.save()
-        qo1 = QuestionOption(question = q, option = 'First option')
-        qo1.save()
-        qo2 = QuestionOption(question = q, option = 'Second option')
-        qo2.save()
-        qo3 = QuestionOption(question = q, option = 'Third option')
-        qo3.save()
-
-        self.assertEquals(q.options.all().count(), 2)
-        self.assertEquals(q.type, 'B')
-        self.assertEquals(q.options.all()[0].option, 'Sí')
-        self.assertEquals(q.options.all()[1].option, 'No')
-        self.assertEquals(q.options.all()[0].number, 1)
-        self.assertEquals(q.options.all()[1].number, 2)
-
-    # Testing multiple option question feature
-    def test_create_multiple_options_question_without_numbers(self):
-        q = Question(desc='Multiple option question test', type='m')
-        q.save()
-
-        qo1 = QuestionOption(question = q, option = 'First option')
-        qo1.save()
-        qo2 = QuestionOption(question = q, option = 'Second option')
-        qo2.save()
-        qo3 = QuestionOption(question = q, option = 'Third option')
-        qo3.save()
-
-        self.assertEquals(q.type, 'm')
-        self.assertEquals(q.options.all()[0].option, 'First option')
-        self.assertEquals(q.options.all()[1].option, 'Second option')
-        self.assertEquals(q.options.all()[2].option, 'Third option')
-        self.assertEquals(q.options.all()[0].number, 2)
-        self.assertEquals(q.options.all()[1].number, 3)
-        self.assertEquals(q.options.all()[2].number, 4)
-
-    # Testing multiple option question with more than 3 options feature
-    def test_create_multiple_options_question_with_numbers_and_more_than_3_options(self):
-        q = Question(desc='Multiple option question test', type='m')
-        q.save()
-
-        qo1 = QuestionOption(question = q, number = 1,option = 'First option')
-        qo1.save()
-        qo2 = QuestionOption(question = q, number = 2,option = 'Second option')
-        qo2.save()
-        qo3 = QuestionOption(question = q, number = 3,option = 'Third option')
-        qo3.save()
-        qo4 = QuestionOption(question = q, number = 4,option = 'Fourth option')
-        qo4.save()
-        qo5 = QuestionOption(question = q, number = 5,option = 'Fifth option')
-        qo5.save()
-
-        self.assertEquals(q.type, 'm')
-        self.assertEquals(q.options.all()[0].option, 'First option')
-        self.assertEquals(q.options.all()[1].option, 'Second option')
-        self.assertEquals(q.options.all()[2].option, 'Third option')
-        self.assertEquals(q.options.all()[3].option, 'Fourth option')
-        self.assertEquals(q.options.all()[4].option, 'Fifth option')
-        self.assertEquals(q.options.all()[0].number, 1)
-        self.assertEquals(q.options.all()[1].number, 2)
-        self.assertEquals(q.options.all()[2].number, 3)
-        self.assertEquals(q.options.all()[3].number, 4)
-        self.assertEquals(q.options.all()[4].number, 5)
 
 class LogInSuccessTests(StaticLiveServerTestCase):
 
@@ -515,6 +383,16 @@ class QuestionsTests(StaticLiveServerTestCase):
 
         self.assertTrue(self.cleaner.find_element_by_xpath('/html/body/div/div[3]/div/div[1]/div/form/div/p').text == 'Please correct the errors below.')
         self.assertTrue(self.cleaner.current_url == self.live_server_url+"/admin/voting/question/add/")
+    
+    def test_to_string(self):
+        #Crea un objeto votacion
+        v = self.create_voting()
+        #Verifica que el nombre de la votacion es test voting
+        self.assertEquals(str(v),"test voting")
+        #Verifica que la descripcion de la pregunta sea test question
+        self.assertEquals(str(v.question),"test question")
+        #Verifica que la primera opcion es option1 (2)
+        self.assertEquals(str(v.question.options.all()[0]),"option 1 (2)")
 
 class VotingModelTestCase(BaseTestCase):
     def setUp(self):

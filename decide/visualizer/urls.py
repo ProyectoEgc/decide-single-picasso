@@ -1,6 +1,5 @@
 from django.urls import path
 from .views import VisualizerView
-from  postproc import views
 
 
 urlpatterns = [
