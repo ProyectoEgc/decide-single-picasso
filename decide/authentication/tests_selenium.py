@@ -8,7 +8,7 @@ from selenium.webdriver.support import expected_conditions as EC
 class TestRegister(StaticLiveServerTestCase):
   def setUp(self):
     options = webdriver.ChromeOptions()
-    options.headless = False 
+    options.headless = True 
     self.driver = webdriver.Chrome(options=options)
 
     super().setUp()

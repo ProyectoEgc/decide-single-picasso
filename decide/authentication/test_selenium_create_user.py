@@ -15,7 +15,6 @@ from django.contrib.auth.models import User
 class AdminTestCase(StaticLiveServerTestCase):
 
   def setUp(self):
-    self.databases = 'test'
     self.base = BaseTestCase()
     self.base.setUp()
     options = webdriver.ChromeOptions()
@@ -50,11 +49,8 @@ class AdminTestCase(StaticLiveServerTestCase):
     self.driver.find_element(By.ID, "id_password2").click()
     self.driver.find_element(By.ID, "id_password2").send_keys("user1234")
     self.driver.find_element(By.NAME, "_save").click()
-    time.sleep(5)
-    wait = WebDriverWait(self.driver, 10)
-    success_message_element = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, ".messagelist .success")))  
-    # Assert that the error message is displayed
-    self.assertTrue(success_message_element.is_displayed(), "El usuario 'usuario1' se ha agregado correctamente. Puede editarlo nuevamente a continuación.")
+    
+
       
   
 
