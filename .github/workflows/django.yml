@@ -3,20 +3,23 @@ name: Python application
 on:
   push:
     branches:
-      - develop
+      - deploy
       - master
+      - develop
+  pull_request:
+    branches:
+      - deploy
+      - master
+      - develop
 
 jobs:
   build:
-    strategy:
-      matrix:
-        pyversion: ['3.8','3.9']
 
     runs-on: ubuntu-latest
 
     services:
       postgres:
-        image: postgres:11.18-bullseye
+        image: postgres:14.9
         env:
           POSTGRES_USER: decide
           POSTGRES_PASSWORD: decide
@@ -28,10 +31,17 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    - name: Set up Python ${{matrix.pyversion}}
+    - name: Set up Python 3.10.12
       uses: actions/setup-python@v4
       with:
-        python-version: ${{matrix.pyversion}}
+        python-version: 3.10.12
+    - name: Send Email
+        env:
+          USER_EMAIL: ${{ secrets.USER_EMAIL }}
+          USER_PASSWORD: ${{ secrets.USER_PASSWORD }}
+        run: |
+          cd decide
+          python send_email.py
     - name: psycopg2 prerequisites
       run: sudo apt-get install libpq-dev
     - name: Install dependencies and config
@@ -40,6 +50,11 @@ jobs:
         pip install -r requirements.txt
         pip install codacy-coverage
         cp decide/local_settings.gactions.py decide/local_settings.py
+    - name: traslations
+        run: |
+          sudo apt-get install gettext
+          cd decide
+          ./manage.py compilemessages
     - name: Run migrations (unnecessary)
       run: |
         cd decide
@@ -47,11 +62,21 @@ jobs:
     - name: Run tests
       run: |
         cd decide
-        coverage run --branch --source=. ./manage.py test  --keepdb 
+        coverage run ./manage.py test
         coverage xml 
     - name: Codacy Coverage Reporter
       uses: codacy/codacy-coverage-reporter-action@v1
       with:
           project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
-          coverage-reports: decide/coverage.xml
-
+          coverage-reports: decide/coverage.xml 
+  
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+    - name: Deploy
+      if: github.ref == 'refs/heads/deploy'
+      env:
+        deploy_url: ${{secrets.RENDER_DEPLOY_HOOK_URL}}
+      run: |
+        curl "$deploy_url" 
