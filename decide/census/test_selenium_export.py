@@ -14,7 +14,7 @@ class TestSelenium(StaticLiveServerTestCase):
   def setUp(self):
     # Configuración específica para Selenium y WebDriver
     options = webdriver.ChromeOptions()
-    options.headless = False 
+    options.headless = True 
     self.driver = webdriver.Chrome(options=options)
     self.user = User.objects.create_user(username='miusuario', password='micontraseña')
     self.user.is_staff = True
