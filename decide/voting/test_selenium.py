@@ -101,7 +101,7 @@ class TestImageVoting(StaticLiveServerTestCase):
     self.driver.find_element(By.CSS_SELECTOR, ".submit-row > input").click()
 
     # Crear usuario, no necesario
-    self.driver.find_element(By.LINK_TEXT, "Usuarios").click()
+    self.driver.find_element(By.LINK_TEXT, "Users").click()
     
     #Numero para controlar la id del usuario para usarla en el censo
     numero_usuarios = self.driver.find_element(By.CLASS_NAME,"paginator")

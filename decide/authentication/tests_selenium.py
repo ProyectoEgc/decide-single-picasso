@@ -5,18 +5,21 @@ from selenium.webdriver.support.wait import WebDriverWait
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium.webdriver.support import expected_conditions as EC
 
+from base.tests import BaseTestCase
 class TestRegister(StaticLiveServerTestCase):
   def setUp(self):
+    self.base = BaseTestCase()
+    self.base.setUp()
     options = webdriver.ChromeOptions()
-    options.headless = False 
+    options.headless = True
     self.driver = webdriver.Chrome(options=options)
-
-    super().setUp()
-
-  def teardown_method(self, method):
+    super().setUp()            
+          
+  def tearDown(self):           
     super().tearDown()
     self.driver.quit()
-  
+
+    self.base.tearDown()
   def test_register(self):
     self.driver.get(f"{self.live_server_url}/signup/")
     self.driver.find_element(By.ID, "username").click()
