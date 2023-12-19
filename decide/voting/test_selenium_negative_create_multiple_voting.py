@@ -93,7 +93,7 @@ class TestNegativeCreateMultipleVoting(StaticLiveServerTestCase):
         self.driver.find_element(By.LINK_TEXT, "Censuss").click()
         self.driver.find_element(By.CSS_SELECTOR, "li > .addlink").click()
         self.driver.find_element(By.ID, "id_voting_id").click()
-        self.driver.find_element(By.ID, "id_voting_id").send_keys("1")
+        self.driver.find_element(By.ID, "id_voting_id").send_keys("9")
         self.driver.find_element(By.ID, "id_voter_id").click()
         self.driver.find_element(By.ID, "id_voter_id").send_keys("4")  # ID del usuario creado
         self.driver.find_element(By.NAME, "_save").click()
@@ -109,7 +109,7 @@ class TestNegativeCreateMultipleVoting(StaticLiveServerTestCase):
 
         # El usuario censado accede a la votación
 
-        self.driver.get(f"{self.live_server_url}/booth/1/")
+        self.driver.get(f"{self.live_server_url}/booth/9/")
         time.sleep(1)
         wait = WebDriverWait(self.driver, 10)
         time.sleep(1)

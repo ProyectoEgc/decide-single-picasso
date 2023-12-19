@@ -1,5 +1,7 @@
+import os
 import random
 import itertools
+import time
 from django.utils import timezone
 from django.conf import settings
 from django.contrib.auth.models import User
@@ -7,6 +9,9 @@ from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.test import TestCase
 from rest_framework.test import APIClient
 from rest_framework.test import APITestCase
+from selenium.common.exceptions import WebDriverException
+from django.core.exceptions import ValidationError
+
 
 from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait
@@ -245,6 +250,12 @@ class VotingTestCase(BaseTestCase):
             else:
                 self.assertEquals(q.options.all()[i].option, str(i))
 
+    def test_empty_description(self):
+        with self.assertRaises(ValidationError):
+            question = Question(desc='')  
+            question.full_clean()  
+
+
     def test_create_score_question_creating_other_options(self):
         q = Question(desc='Score question test', type='S')
         q.save()
@@ -270,8 +281,7 @@ class VotingTestCase(BaseTestCase):
 
             else:
                 self.assertEquals(q.options.all()[i].option, str(i))
-        
-    
+
     def test_update_voting_405(self):
         v = self.create_voting()
         data = {} #El campo action es requerido en la request
@@ -318,6 +328,92 @@ class VotingTestCase(BaseTestCase):
         self.assertEquals(q.options.all()[1].option, 'No')
         self.assertEquals(q.options.all()[0].number, 1)
         self.assertEquals(q.options.all()[1].number, 2)
+
+    # Updating options yes no
+    def test_update_yes_no_question_without_additional_options(self):
+        # Crear una pregunta de sí/no inicialmente
+        q = Question(desc='Yes/No question test', type='B')
+        q.save()
+
+        # Verificar que la pregunta se creó correctamente como sí/no
+        self.assertEqual(q.options.all().count(), 2)
+        self.assertEqual(q.type, 'B')
+        self.assertEqual(q.options.all()[0].option, 'Sí')
+        self.assertEqual(q.options.all()[1].option, 'No')
+        self.assertEqual(q.options.all()[0].number, 1)
+        self.assertEqual(q.options.all()[1].number, 2)
+
+        # Actualizar la pregunta sin agregar opciones adicionales
+        q.desc = 'Updated Yes/No question test'
+        q.save()
+
+        # Verificar que la pregunta se actualizó correctamente y aún tiene solo dos opciones (Sí/No)
+        self.assertEqual(q.options.all().count(), 2)
+        self.assertEqual(q.type, 'B')
+        self.assertEqual(q.options.all()[0].option, 'Sí')
+        self.assertEqual(q.options.all()[1].option, 'No')
+        self.assertEqual(q.options.all()[0].number, 1)
+        self.assertEqual(q.options.all()[1].number, 2)
+    
+    # Updating options yes no with additional options
+    def test_update_yes_no_question_with_additional_options(self):
+        # Crear una pregunta de sí/no inicialmente
+        q = Question(desc='Yes/No question test', type='B')
+        q.save()
+        qo1 = QuestionOption(question = q, option = 'First option')
+        qo1.save()
+        qo2 = QuestionOption(question = q, option = 'Second option')
+        qo2.save()
+        qo3 = QuestionOption(question = q, option = 'Third option')
+        qo3.save()
+
+        # Verificar que la pregunta se creó correctamente como sí/no
+        self.assertEqual(q.options.all().count(), 2)
+        self.assertEqual(q.type, 'B')
+        self.assertEqual(q.options.all()[0].option, 'Sí')
+        self.assertEqual(q.options.all()[1].option, 'No')
+        self.assertEqual(q.options.all()[0].number, 1)
+        self.assertEqual(q.options.all()[1].number, 2)
+
+        # Actualizar la pregunta sin agregar opciones adicionales
+        q.desc = 'Updated Yes/No question test'
+        q.save()
+        qo1 = QuestionOption(question = q, option = 'First option')
+        qo1.save()
+        qo2 = QuestionOption(question = q, option = 'Second option')
+        qo2.save()
+        qo3 = QuestionOption(question = q, option = 'Third option')
+        qo3.save()
+
+        # Verificar que la pregunta se actualizó correctamente y aún tiene solo dos opciones (Sí/No)
+        self.assertEqual(q.options.all().count(), 2)
+        self.assertEqual(q.type, 'B')
+        self.assertEqual(q.options.all()[0].option, 'Sí')
+        self.assertEqual(q.options.all()[1].option, 'No')
+        self.assertEqual(q.options.all()[0].number, 1)
+        self.assertEqual(q.options.all()[1].number, 2)
+
+    def test_delete_yes_no_question_and_options(self):
+        # Crear una pregunta de sí/no
+        q = Question(desc='Yes/No question test', type='B')
+        q.save()
+
+        # Agregar opciones adicionales a la pregunta de sí/no
+        qo1 = QuestionOption(question=q, option='First option')
+        qo1.save()
+        qo2 = QuestionOption(question=q, option='Second option')
+        qo2.save()
+
+        # Verificar que la pregunta tiene las opciones originales
+        self.assertEqual(q.options.all().count(), 2) 
+
+        # Eliminar la pregunta de sí/no
+        q.delete()
+
+        # Verificar que la pregunta y sus opciones asociadas fueron eliminadas correctamente
+        self.assertFalse(Question.objects.filter(desc='Yes/No question test').exists())  # Verificar que la pregunta fue eliminada
+        self.assertFalse(QuestionOption.objects.filter(question=q).exists())  # Verificar que las opciones fueron eliminadas
+
 
     # Testing multiple option question feature
     def test_create_multiple_options_question_without_numbers(self):
@@ -452,10 +548,7 @@ class QuestionsTests(StaticLiveServerTestCase):
         #Load base test functionality for decide
         self.base = BaseTestCase()
         self.base.setUp()
-
-        options = webdriver.ChromeOptions()
-        options.headless = True
-        self.driver = webdriver.Chrome(options=options)
+        self.cleaner = Cleaner() 
 
         super().setUp()
 
@@ -464,7 +557,7 @@ class QuestionsTests(StaticLiveServerTestCase):
         self.driver.quit()
 
         self.base.tearDown()
-
+    
     def createQuestionSuccess(self):
         self.cleaner.get(self.live_server_url+"/admin/login/?next=/admin/")
         self.cleaner.set_window_size(1280, 720)

@@ -5,6 +5,7 @@ on:
     branches:
       - develop
       - master
+      - FEATURE34/ferbarbar1-carnucbol
 
 jobs:
   build:
