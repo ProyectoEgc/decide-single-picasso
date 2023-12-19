@@ -58,13 +58,13 @@ jobs:
       - name: Run tests
         run: |
           cd decide
-          coverage run --branch --source=. ./manage.py test  --keepdb
-          coverage xml 
+          coverage run --branch --source=. ./manage.py test 
+          coverage html
       - name: Codacy Coverage Reporter
         uses: codacy/codacy-coverage-reporter-action@v1
         with:
           project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
-          coverage-reports: decide/coverage.xml
+          coverage-reports: decide/coverage.html
 
   deploy:
     runs-on: ubuntu-latest
