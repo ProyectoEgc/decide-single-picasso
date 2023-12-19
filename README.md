@@ -6,7 +6,9 @@ Comandos A Realizar Antes de Correr el Proyecto
 Uso de las traducciones en la pagina web:
 
 pip apt-get install gettex (puede ser necesario poner delante sudo)
+
 cd decide-single-picasso/decide/
+
 ./manage.py compilemessages
 
 Plantila de commits automática:
