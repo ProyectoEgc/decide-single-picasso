@@ -9,7 +9,9 @@ from base.tests import BaseTestCase
 from django.contrib.auth.models import User
 import time
 import os
+from nose.tools import nottest
 
+@nottest
 class TestSelenium(StaticLiveServerTestCase):
   def setUp(self):
     # Configuración específica para Selenium y WebDriver

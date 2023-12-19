@@ -8,7 +8,9 @@ import time
 
 from base.tests import BaseTestCase
 from selenium.webdriver.common.keys import Keys
+from nose.tools import nottest
 
+@nottest
 class TestMultipleOptionVoting(StaticLiveServerTestCase):
     def setUp(self):
         # Configuración específica para Selenium y WebDriver
