@@ -235,9 +235,7 @@ class TestImageVoting(StaticLiveServerTestCase):
     # El usuario censado accede a la votacion
     
     # Puedes cambiar este valor según tus necesidades
-    url = f'{self.live_server_url}/booth/{numero_v}/'
-    
-    self.driver.get(url)
+    self.driver.get(f'{self.live_server_url}/booth/{numero_v}')
     time.sleep(2)
     self.driver.find_element(By.CSS_SELECTOR, ".nav-item > .btn").click()
     self.driver.find_element(By.ID, "username").click()
