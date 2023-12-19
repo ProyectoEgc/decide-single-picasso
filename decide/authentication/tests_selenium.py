@@ -38,6 +38,7 @@ class TestRegister(StaticLiveServerTestCase):
     current_url = self.driver.current_url
     self.assertEqual(current_url, expected_login_url, f"La URL actual {current_url} no coincide con la esperada {expected_login_url}")
 
+
   def test_negative_register(self):
     self.driver.get(f"{self.live_server_url}/signup/")
     self.driver.find_element(By.ID, "username").click()
