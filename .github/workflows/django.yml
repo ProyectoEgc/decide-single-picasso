@@ -51,6 +51,10 @@ jobs:
           sudo apt-get install gettext
           cd decide
           ./manage.py compilemessages
+      - name: selenium prerequisites
+        run: |
+          pip install selenium
+          sudo apt install chromium-browser chromium-chromedriver
       - name: Run migrations (unnecessary)
         run: |
           cd decide
