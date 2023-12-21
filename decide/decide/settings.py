@@ -45,7 +45,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'rest_framework_swagger',
     'gateway',
-    'import_export',
+    'import_export', #Habría qque estudiar como hacerlo
 ]
 
 REST_FRAMEWORK = {
